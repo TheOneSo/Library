@@ -1,7 +1,6 @@
 package com.oneso.library.shell;
 
-import com.oneso.library.domain.Autor;
-import com.oneso.library.services.AutorService;
+import com.oneso.library.services.AuthorService;
 import com.oneso.library.services.BookService;
 import com.oneso.library.services.GenreService;
 import org.springframework.shell.Availability;
@@ -14,21 +13,21 @@ import org.springframework.shell.standard.ShellOption;
 public class ApplicationControl {
 
     private final BookService bookService;
-    private final AutorService autorService;
+    private final AuthorService authorService;
     private final GenreService genreService;
 
     private boolean avialable = true;
 
-    public ApplicationControl(BookService bookService, AutorService autorService, GenreService genreService) {
+    public ApplicationControl(BookService bookService, AuthorService authorService, GenreService genreService) {
         this.bookService = bookService;
-        this.autorService = autorService;
+        this.authorService = authorService;
         this.genreService = genreService;
     }
 
     @ShellMethod("Show all in library")
     public void showLibrary() {
-        System.out.println("Autors:");
-        autorService.showAllAutors();
+        System.out.println("Authors:");
+        authorService.showAllAuthors();
         System.out.println("Books:");
         bookService.showAllBook();
         System.out.println("Genre:");
@@ -36,13 +35,13 @@ public class ApplicationControl {
     }
 
     @ShellMethod("Create new book")
-    public void addNewBook(@ShellOption String nameBook, @ShellOption String nameAutor, @ShellOption String nameGenre) {
-        bookService.addBook(nameBook, autorService.getAutor(nameAutor), genreService.getGenre(nameGenre));
+    public void addNewBook(@ShellOption String nameBook, @ShellOption String nameAuthor, @ShellOption String nameGenre) {
+        bookService.addBook(nameBook, authorService.getAuthor(nameAuthor), genreService.getGenre(nameGenre));
     }
 
-    @ShellMethod("Create new autor")
-    public void addNewAutor(@ShellOption String name) {
-        autorService.addAutor(name);
+    @ShellMethod("Create new author")
+    public void addNewAuthor(@ShellOption String name) {
+        authorService.addAuthor(name);
     }
 
     @ShellMethod("Create new genre")
@@ -52,8 +51,8 @@ public class ApplicationControl {
 
     @ShellMethod("Deleted book")
     @ShellMethodAvailability("showBooks")
-    public void deleteBook(@ShellOption String name) {
-        bookService.deleteBook(name);
+    public void deleteBook(@ShellOption long id) {
+        bookService.deleteBook(id);
     }
 
     @ShellMethod("Show all book in library")
@@ -62,20 +61,20 @@ public class ApplicationControl {
         return avialable ? Availability.available() : Availability.unavailable("not ok");
     }
 
-    @ShellMethod("Deleted autor")
-    @ShellMethodAvailability("showAutors")
-    public void deleteAutor(@ShellOption String name) {
-        autorService.deleteAutor(name);
+    @ShellMethod("Deleted author")
+    @ShellMethodAvailability("showAuthors")
+    public void deleteAuthor(@ShellOption long id) {
+        authorService.deleteAuthor(id);
     }
 
-    @ShellMethod("Show all autor in library")
-    public Availability showAutors() {
-        autorService.showAllAutors();
+    @ShellMethod("Show all author in library")
+    public Availability showAuthors() {
+        authorService.showAllAuthors();
         return avialable ? Availability.available() : Availability.unavailable("not ok");
     }
 
-    @ShellMethod("Show all information to autor")
-    public void showInfoAutor(@ShellOption String name) {
-        autorService.showAllInfoAutor(name);
+    @ShellMethod("Show all information to author")
+    public void showInfoAuthor(@ShellOption long id) {
+        bookService.showAllBookByAuthor(id);
     }
 }

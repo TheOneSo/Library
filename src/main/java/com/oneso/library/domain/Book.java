@@ -6,19 +6,19 @@ public class Book {
 
     private String name;
 
-    private Autor autor;
+    private Author author;
 
     private Genre genre;
 
-    public Book(long id, String name, Autor autor, Genre genre) {
+    public Book(long id, String name, Author author, Genre genre) {
         this.id = id;
         this.name = name;
-        this.autor = autor;
+        this.author = author;
         this.genre = genre;
     }
 
-    public Book(String name, Autor autor, Genre genre) {
-        this(0, name, autor, genre);
+    public Book(String name, Author author, Genre genre) {
+        this(0, name, author, genre);
     }
 
     public long getId() {
@@ -33,12 +33,12 @@ public class Book {
         return name;
     }
 
-    public Autor getAutor() {
-        return autor;
+    public Author getAuthor() {
+        return author;
     }
 
-    public void setAutor(Autor autor) {
-        this.autor = autor;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     public Genre getGenre() {
