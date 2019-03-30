@@ -4,3 +4,6 @@ spring:
     username: postgres
     password: admin
     driver-class-name: org.postgresql.Driver
+    initialization-mode: always
+    data: data.sql
+    schema: schema.sql
