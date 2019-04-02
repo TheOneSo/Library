@@ -10,6 +10,8 @@ public interface BookDao {
 
     Book findById(long id);
 
+    List<Book> findAllBookByAuthorId(long id);
+
     Book findByName(String name);
 
     List<Book> findAll();
@@ -17,4 +19,6 @@ public interface BookDao {
     int count();
 
     void deleteByName(String name);
+
+    void deleteById(long id);
 }

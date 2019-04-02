@@ -11,8 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.*;
 
 @JdbcTest
-@ComponentScan
 @ActiveProfiles("test")
+@ComponentScan("com.oneso.library.dao")
 @DisplayName("Дао по работе с жанрами")
 public class GenreDaoTest {
 
@@ -56,6 +56,18 @@ public class GenreDaoTest {
         genreDao.insert(new Genre("deleteGenre"));
         int expected = genreDao.count() - 1;
         genreDao.deleteByName("deleteGenre");
+        int actual = genreDao.count();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("удаляет жанр по id")
+    public void shouldDeleteGenreById() {
+        genreDao.insert(new Genre("deleteId"));
+        Genre genre = genreDao.findByName("deleteId");
+        int expected = genreDao.count() - 1;
+        genreDao.deleteById(genre.getId());
         int actual = genreDao.count();
 
         assertEquals(expected, actual);

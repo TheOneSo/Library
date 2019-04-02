@@ -1,15 +1,17 @@
 package com.oneso.library.services;
 
-import com.oneso.library.domain.Autor;
+import com.oneso.library.domain.Author;
 import com.oneso.library.domain.Genre;
 
 public interface BookService {
 
-    void addBook(String book, Autor autor, Genre genre);
+    void addBook(String book, Author author, Genre genre);
 
     void showAllBook();
 
-    void showAllInfoToBook(String name);
+    void showAllBookByAuthor(long authorId);
 
-    void deleteBook(String name);
+    void showInfoByBook(String name);
+
+    void deleteBook(long id);
 }

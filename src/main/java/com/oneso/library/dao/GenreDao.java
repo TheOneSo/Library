@@ -17,4 +17,6 @@ public interface GenreDao {
     int count();
 
     void deleteByName(String name);
+
+    void deleteById(long id);
 }

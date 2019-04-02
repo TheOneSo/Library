@@ -17,16 +17,16 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public void addGenre(String name) {
-        Genre _genre = new Genre(name);
+        Genre genre = new Genre(name);
 
-        genreDao.insert(_genre);
+        genreDao.insert(genre);
     }
 
     @Override
     public void showAllGenre() {
         List<Genre> genres = genreDao.findAll();
 
-        genres.forEach(genre -> System.out.printf("[Genre]: %s%n", genre.getName()));
+        genres.forEach(genre -> System.out.printf("[Genre_%d]: %s%n", genre.getId(), genre.getName()));
     }
 
     @Override
@@ -35,7 +35,12 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public void deleteGenre(String name) {
-        genreDao.deleteByName(name);
+    public Genre getGenre(long id) {
+        return genreDao.findById(id);
+    }
+
+    @Override
+    public void deleteGenre(long id) {
+        genreDao.deleteById(id);
     }
 }

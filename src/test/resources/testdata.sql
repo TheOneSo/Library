@@ -1,3 +1,3 @@
-insert into autors (autor) values ('testA');
+insert into authors (author) values ('testA');
 insert into genres (genre) values ('testG');
-insert into books (book, id_autor, id_genre) VALUES ('testB', 1, 1);
+insert into books (book, id_author, id_genre) VALUES ('testB', 1, 1);

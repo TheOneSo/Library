@@ -43,17 +43,26 @@ class GenreServiceTest {
     @Test
     @DisplayName("возвращает жанр")
     void shouldReturnGenre() {
-        Genre _genre = new Genre("test");
-        when(genreDao.findByName("test")).thenReturn(_genre);
+        Genre genre = new Genre("test");
+        when(genreDao.findByName("test")).thenReturn(genre);
 
-        assertEquals(_genre, genreService.getGenre("test"));
+        assertEquals(genre, genreService.getGenre("test"));
+    }
+
+    @Test
+    @DisplayName("возвращает жанр по id")
+    void shouldReturnGenreById() {
+        Genre genre = new Genre("test");
+        when(genreDao.findById(anyLong())).thenReturn(genre);
+
+        assertEquals(genre, genreService.getGenre(1));
     }
 
     @Test
     @DisplayName("удаляет жанр")
     void shouldDeleteGenre() {
-        genreService.deleteGenre("test");
+        genreService.deleteGenre(1);
 
-        verify(genreDao, times(1)).deleteByName("test");
+        verify(genreDao, times(1)).deleteById(1);
     }
 }
