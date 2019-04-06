@@ -1,13 +1,13 @@
 package com.oneso.library.services;
 
-import com.oneso.library.dao.AuthorDao;
 import com.oneso.library.domain.Author;
+import com.oneso.library.repository.AuthorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Сервис по работе с авторами")
@@ -16,12 +16,12 @@ class AuthorServiceTest {
     private AuthorService service;
 
     @Mock
-    private AuthorDao authorDao;
+    private AuthorRepository aRepo;
 
     @BeforeEach
     void setUp() {
-        authorDao = mock(AuthorDao.class);
-        service = new AuthorServiceImpl(authorDao);
+        aRepo = mock(AuthorRepository.class);
+        service = new AuthorServiceImpl(aRepo);
     }
 
     @Test
@@ -29,33 +29,24 @@ class AuthorServiceTest {
     void shouldAddNewAuthor() {
         service.addAuthor("test");
 
-        verify(authorDao, times(1)).insert(any());
-    }
-
-    @Test
-    @DisplayName("достает автора из BD по имени")
-    void shouldGetAuthorForBDByName() {
-        Author author = new Author("test");
-        when(authorDao.findByName(anyString())).thenReturn(author);
-
-        assertEquals(author, service.getAuthor("test"));
+        verify(aRepo, times(1)).insert(any());
     }
 
     @Test
     @DisplayName("достает автора из BD по id")
     void shouldGetAuthorFirBDById() {
-        Author author = new Author("test");
-        when(authorDao.findById(anyLong())).thenReturn(author);
+        when(aRepo.findById(anyLong())).thenReturn(new Author("test"));
 
-        assertEquals(author, service.getAuthor(1));
+        assertNotNull(service.getAuthor(1));
+        verify(aRepo, times(1)).findById(anyLong());
     }
 
     @Test
     @DisplayName("получает список авторов")
     void shouldGetListAuthors() {
-        service.showAllAuthors();
+        service.getAllAuthors();
 
-        verify(authorDao, times(1)).findAll();
+        verify(aRepo, times(1)).findAll();
     }
 
     @Test
@@ -63,6 +54,6 @@ class AuthorServiceTest {
     void shouldDeleteAuthor() {
         service.deleteAuthor(1);
 
-        verify(authorDao, times(1)).deleteById(1);
+        verify(aRepo, times(1)).deleteById(1);
     }
 }

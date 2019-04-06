@@ -1,16 +1,12 @@
 package com.oneso.library.services;
 
-import com.oneso.library.domain.Author;
-
 public interface AuthorService {
 
     void addAuthor(String name);
 
-    Author getAuthor(String name);
+    String getAuthor(long id);
 
-    Author getAuthor(long id);
-
-    void showAllAuthors();
+    String getAllAuthors();
 
     void deleteAuthor(long id);
 }

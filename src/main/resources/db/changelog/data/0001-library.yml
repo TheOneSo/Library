@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0001-author-test-data
+      author: sergey
+      context: test
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/author.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: author
+
+  - changeSet:
+      id: 0002-genre-test-data
+      author: segey
+      context: test
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/genre.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ':'
+        encoding: UTF-8
+        tableName: genre
+
+  - changeSet:
+      id: 0003-book-test-data
+      author: sergey
+      context: test
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/book.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: book

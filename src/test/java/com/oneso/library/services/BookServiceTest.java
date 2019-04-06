@@ -1,71 +1,92 @@
 package com.oneso.library.services;
 
-import com.oneso.library.dao.BookDao;
 import com.oneso.library.domain.Author;
 import com.oneso.library.domain.Book;
 import com.oneso.library.domain.Genre;
+import com.oneso.library.repository.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Сервис по работе с книгами")
 class BookServiceTest {
 
-    private BookService bookService;
+    private BookService service;
 
     @Mock
-    private BookDao bookDao;
+    private BookRepository bRepo;
+
+    private Book testBook;
 
     @BeforeEach
     void setUp() {
-        bookDao = mock(BookDao.class);
-        bookService = new BookServiceImpl(bookDao);
+        bRepo = mock(BookRepository.class);
+        service = new BookServiceImpl(bRepo);
+
+        testBook = new Book("test", new Author("test"), new Genre("test"),
+                new ArrayList<>());
     }
 
     @Test
     @DisplayName("добавляет новую книгу")
     void shouldAddNewBook() {
-        bookService.addBook("test", new Author("test"), new Genre("test"));
+        service.addBook("test", 1, 1);
 
-        verify(bookDao, times(1)).insert(any());
+        verify(bRepo, times(1)).insert(any());
     }
 
     @Test
     @DisplayName("показывает все книги")
     void shouldShowAllBooks() {
-        bookService.showAllBook();
+        List<Book> books = Collections.singletonList(testBook);
+        when(bRepo.findAll()).thenReturn(books);
 
-        verify(bookDao, times(1)).findAll();
+        assertNotNull(service.getAllBooks());
+        verify(bRepo, times(1)).findAll();
     }
 
     @Test
-    @DisplayName("показывает всю информацию по книге")
-    void shouldShowAllInfoForBook() {
-        when(bookDao.findByName(anyString())).thenReturn(new Book("test", new Author("test"), new Genre("test")));
-        bookService.showInfoByBook("test");
+    @DisplayName("выводит книгу по id")
+    void shouldReturnBookById() {
+        when(bRepo.findById(1)).thenReturn(testBook);
 
-        verify(bookDao, times(1)).findByName("test");
+        assertNotNull(service.getBookById(1));
+        verify(bRepo, times(1)).findById(1);
     }
 
     @Test
-    @DisplayName("показывает все книги по id автора")
-    void shouldShowAllBooksByAuthorId() {
-        when(bookDao.findAllBookByAuthorId(1)).thenReturn(new ArrayList<>());
-        bookService.showAllBookByAuthor(1);
+    @DisplayName("выводит все книги по автора")
+    void shouldReturnAllBooksForAuthor() {
+        List<Book> books = Collections.singletonList(testBook);
+        when(bRepo.findAllBookByAuthorId(1)).thenReturn(books);
 
-        verify(bookDao, times(1)).findAllBookByAuthorId(1);
+        assertNotNull(service.getAllBookByAuthorId(1));
+        verify(bRepo, times(1)).findAllBookByAuthorId(1);
+    }
+
+    @Test
+    @DisplayName("выводит все книги по жанру")
+    void shouldReturnAllBooksForGenre() {
+        List<Book> books = Collections.singletonList(testBook);
+        when(bRepo.findAllBookByGenreId(1)).thenReturn(books);
+
+        assertNotNull(service.getAllBookByGenreId(1));
+        verify(bRepo, times(1)).findAllBookByGenreId(1);
     }
 
     @Test
     @DisplayName("удаляет книгу")
     void shouldDeleteBook() {
-        bookService.deleteBook(1);
+        service.deleteBook(1);
 
-        verify(bookDao, times(1)).deleteById(1);
+        verify(bRepo, times(1)).deleteById(1);
     }
 }
