@@ -1,0 +1,65 @@
+databaseChangeLog:
+- changeSet:
+    id: 2019-04-03--0001--author
+    author: sergey
+    createTable:
+      tableName: author
+      columns:
+        - column:
+            name: id
+            type: bigint
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+        - column:
+            name: name
+            type: varchar(255)
+
+- changeSet:
+    id: 2019-04-03--0001--genre
+    author: sergey
+    createTable:
+      tableName: genre
+      columns:
+        - column:
+            name: id
+            type: bigint
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+        - column:
+            name: name
+            type: varchar(255)
+
+- changeSet:
+    id: 2019-04-03--0001--book
+    author: sergey
+    createTable:
+      tableName: book
+      columns:
+        - column:
+            name: id
+            type: bigint
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+        - column:
+            name: name
+            type: varchar(255)
+        - column:
+            name: id_author
+            type: bigint
+            constraints:
+              nullable: false
+              foreignKeyName: fk_book_author
+              references: author(id)
+        - column:
+            name: id_genre
+            type: bigint
+            constraints:
+              nullable: false
+              foreignKeyName: fk_book_genre
+              references: genre(id)

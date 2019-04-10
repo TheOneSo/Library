@@ -1,7 +1,7 @@
 package com.oneso.library.services;
 
-import com.oneso.library.dao.GenreDao;
 import com.oneso.library.domain.Genre;
+import com.oneso.library.repository.GenreRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,38 +9,38 @@ import java.util.List;
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    private final GenreDao genreDao;
+    private final GenreRepository genreRepository;
 
-    public GenreServiceImpl(GenreDao genreDao) {
-        this.genreDao = genreDao;
+    public GenreServiceImpl(GenreRepository genreRepository) {
+        this.genreRepository = genreRepository;
     }
 
     @Override
     public void addGenre(String name) {
         Genre genre = new Genre(name);
 
-        genreDao.insert(genre);
+        genreRepository.insert(genre);
     }
 
     @Override
-    public void showAllGenre() {
-        List<Genre> genres = genreDao.findAll();
+    public String getAllGenres() {
+        StringBuilder builder = new StringBuilder();
+        List<Genre> genres = genreRepository.findAll();
 
-        genres.forEach(genre -> System.out.printf("[Genre_%d]: %s%n", genre.getId(), genre.getName()));
+        genres.forEach(g -> builder.append(String.format("[Genre_%d]: %s\n", g.getId(), g.getName())));
+
+        return builder.toString();
     }
 
     @Override
-    public Genre getGenre(String name) {
-        return genreDao.findByName(name);
-    }
+    public String getGenre(long id) {
+        Genre genre = genreRepository.findById(id);
 
-    @Override
-    public Genre getGenre(long id) {
-        return genreDao.findById(id);
+        return String.format("[Genre_%d]: %s", genre.getId(), genre.getName());
     }
 
     @Override
     public void deleteGenre(long id) {
-        genreDao.deleteById(id);
+        genreRepository.deleteById(id);
     }
 }

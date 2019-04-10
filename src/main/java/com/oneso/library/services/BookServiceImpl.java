@@ -1,9 +1,9 @@
 package com.oneso.library.services;
 
-import com.oneso.library.dao.BookDao;
 import com.oneso.library.domain.Author;
 import com.oneso.library.domain.Book;
 import com.oneso.library.domain.Genre;
+import com.oneso.library.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,49 +11,77 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private final BookDao bookDao;
+    private final BookRepository bookRepository;
 
-    public BookServiceImpl(BookDao bookDao) {
-        this.bookDao = bookDao;
+    public BookServiceImpl(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     @Override
-    public void addBook(String book, Author author, Genre genre) {
-        bookDao.insert(new Book(book, author, genre));
+    public void addBook(String bookName, long author_id, long genre_id) {
+        Author author = new Author();
+        author.setId(author_id);
+        Genre genre = new Genre();
+        genre.setId(genre_id);
+
+        Book book = new Book();
+        book.setName(bookName);
+        book.setAuthor(author);
+        book.setGenre(genre);
+
+        bookRepository.insert(book);
     }
 
     @Override
-    public void showAllBook() {
-        List<Book> books = bookDao.findAll();
+    public String getAllBooks() {
+        StringBuilder builder = new StringBuilder();
+        List<Book> books = bookRepository.findAll();
 
-        books.forEach(b -> System.out.printf("[Book_%d]: %s%n", b.getId(), b.getName()));
+        books.forEach(b -> builder.append(String.format("[Book_%d]: %s\n", b.getId(), b.getName())));
+
+        return builder.toString();
     }
 
     @Override
-    public void showAllBookByAuthor(long authorId) {
-        List<Book> books = bookDao.findAllBookByAuthorId(authorId);
+    public String getBookById(long id) {
+        StringBuilder builder = new StringBuilder();
+        Book book = bookRepository.findById(id);
 
-        if(!books.isEmpty()) {
-            System.out.printf("[Author_%d]: %s%n", books.get(0).getAuthor().getId(), books.get(0).getAuthor().getName());
+        builder.append(String.format("[Author]: %s\n", book.getAuthor().getName()));
+        builder.append(String.format("[Book]: %s\n", book.getName()));
+        builder.append(String.format("[Genre]: %s\n", book.getGenre().getName()));
 
-            for(Book temp : books) {
-                System.out.printf("[Book_%d]: %s%n", temp.getId(), temp.getName());
-                System.out.printf("[Genre_%d]: %s%n", temp.getGenre().getId(), temp.getGenre().getName());
-            }
-        }
+        return builder.toString();
     }
 
     @Override
-    public void showInfoByBook(String name) {
-        Book book = bookDao.findByName(name);
+    public String getAllBookByAuthorId(long author_id) {
+        StringBuilder builder = new StringBuilder();
+        List<Book> books = bookRepository.findAllBookByAuthorId(author_id);
 
-        System.out.printf("[Book]: %s%n", book.getName());
-        System.out.printf("[Author]: %s%n", book.getAuthor().getName());
-        System.out.printf("[Genre]: %s%n", book.getGenre().getName());
+        builder.append(String.format("[Author_%d]: %s\n",
+                books.get(0).getAuthor().getId(), books.get(0).getAuthor().getName()));
+
+        books.forEach(b -> builder.append(String.format("[Book_%d]: %s\n", b.getId(), b.getName())));
+
+        return builder.toString();
+    }
+
+    @Override
+    public String getAllBookByGenreId(long genre_id) {
+        StringBuilder builder = new StringBuilder();
+        List<Book> books = bookRepository.findAllBookByGenreId(genre_id);
+
+        builder.append(String.format("[Genre_%d]: %s\n",
+                books.get(0).getGenre().getId(), books.get(0).getGenre().getName()));
+
+        books.forEach(b -> builder.append(String.format("[Book_%d]: %s\n", b.getId(), b.getName())));
+
+        return builder.toString();
     }
 
     @Override
     public void deleteBook(long id) {
-        bookDao.deleteById(id);
+        bookRepository.deleteById(id);
     }
 }

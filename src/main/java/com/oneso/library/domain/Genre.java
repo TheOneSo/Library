@@ -1,19 +1,24 @@
 package com.oneso.library.domain;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "genre")
 public class Genre {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
+    @Column(name = "name")
     private String name;
 
-    public Genre(long id, String name) {
-        this.id = id;
+    public Genre(String name) {
         this.name = name;
     }
 
-    public Genre(String name) {
-        this(0, name);
-    }
+    public Genre() {}
 
     public long getId() {
         return id;

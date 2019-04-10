@@ -1,25 +1,40 @@
 package com.oneso.library.domain;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "book")
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
+    @Column(name = "name")
     private String name;
 
+    @OneToOne(targetEntity = Author.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_author")
     private Author author;
 
+    @OneToOne(targetEntity = Genre.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_genre")
     private Genre genre;
 
-    public Book(long id, String name, Author author, Genre genre) {
-        this.id = id;
+    @OneToMany(targetEntity = Comment.class, mappedBy = "book", fetch = FetchType.LAZY)
+    private List<Comment> comments;
+
+    public Book(String name, Author author, Genre genre, List<Comment> comments) {
         this.name = name;
         this.author = author;
         this.genre = genre;
+        this.comments = comments;
     }
 
-    public Book(String name, Author author, Genre genre) {
-        this(0, name, author, genre);
-    }
+    public Book() {}
+
 
     public long getId() {
         return id;
@@ -31,6 +46,10 @@ public class Book {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Author getAuthor() {
@@ -47,5 +66,13 @@ public class Book {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

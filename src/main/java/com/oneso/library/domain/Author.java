@@ -1,19 +1,24 @@
 package com.oneso.library.domain;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "author")
 public class Author {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
+    @Column(name = "name")
     private String name;
 
-    public Author(long id, String name) {
-        this.id = id;
+    public Author(String name) {
         this.name = name;
     }
 
-    public Author(String name) {
-        this(0, name);
-    }
+    public Author() {}
 
     public long getId() {
         return id;

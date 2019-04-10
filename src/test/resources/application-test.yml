@@ -7,3 +7,6 @@ spring:
     initialization-mode: always
     url: jdbc:h2:mem:db1;MODE=PostgreSQL
     data: testdata.sql
+
+  liquibase:
+    enabled: false

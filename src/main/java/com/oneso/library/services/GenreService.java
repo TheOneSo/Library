@@ -1,16 +1,12 @@
 package com.oneso.library.services;
 
-import com.oneso.library.domain.Genre;
-
 public interface GenreService {
 
     void addGenre(String name);
 
-    void showAllGenre();
+    String getAllGenres();
 
-    Genre getGenre(String name);
-
-    Genre getGenre(long id);
+    String getGenre(long id);
 
     void deleteGenre(long id);
 }
