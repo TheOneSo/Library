@@ -6,7 +6,12 @@ spring:
   datasource:
     initialization-mode: always
     url: jdbc:h2:mem:db1;MODE=PostgreSQL
+    schema: schema.sql
     data: testdata.sql
 
   liquibase:
     enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: none

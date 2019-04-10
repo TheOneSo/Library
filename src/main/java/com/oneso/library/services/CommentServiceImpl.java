@@ -26,13 +26,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public String getAllCommentsByBookId(long book_id) {
-        StringBuilder builder = new StringBuilder();
-        List<Comment> comments = commentRepository.findByBookId(book_id);
-
-        comments.forEach(c -> builder.append(String.format("[%d]: %s\n", c.getId(), c.getText())));
-
-        return builder.toString();
+    public List<Comment> getAllCommentsByBookId(long book_id) {
+        return commentRepository.findByBookId(book_id);
     }
 
     @Override
