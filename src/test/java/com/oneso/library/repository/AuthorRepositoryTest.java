@@ -5,8 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -19,31 +22,40 @@ class AuthorRepositoryTest {
     @Autowired
     private AuthorRepository repository;
 
+    @Autowired
+    private TestEntityManager em;
+
     @Test
     @DisplayName("добавляет нового автора")
     void shouldAddNewAuthor() {
         Author author = new Author("test");
-        long expected = repository.count() + 1;
         repository.insert(author);
 
-        assertThat(repository.count())
-                .isEqualTo(expected);
+        long author_id = em.getId(author, Long.class);
+
+        assertThat(repository.findById(author_id).getName())
+                .isEqualTo(author.getName());
     }
 
     @Test
     @DisplayName("находит автора по id")
     void shouldFindAuthorById() {
-        Author actual = repository.findById(1);
+        Author author = new Author("author");
+        em.persist(author);
+        em.flush();
 
-        assertThat(actual)
-                .isNotNull();
+        long author_id = em.getId(author, Long.class);
+
+        Author actual = repository.findById(author_id);
+
+        assertThat(actual.getName())
+                .isEqualTo(author.getName());
     }
 
     @Test
     @DisplayName("находит всех авторов")
     void shouldFindAllAuthorsById() {
-        Author author = new Author("123");
-        repository.insert(author);
+        List<Author> authors = repository.findAll();
 
         assertThat(repository.findAll())
                 .isNotNull();
@@ -54,9 +66,12 @@ class AuthorRepositoryTest {
     void shouldDeleteAuthorById() {
         Author author = new Author("delA");
         long expected = repository.count();
-        repository.insert(author);
+        em.persist(author);
+        em.flush();
 
-        repository.deleteById(2);
+        long author_id = em.getId(author, Long.class);
+
+        repository.deleteById(author_id);
 
         assertThat(repository.count())
                 .isEqualTo(expected);

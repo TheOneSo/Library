@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
@@ -21,40 +22,50 @@ class GenreRepositoryTest {
     @Autowired
     private GenreRepository repository;
 
+    @Autowired
+    private TestEntityManager em;
+
     @Test
     @DisplayName("добавляет новый жанр")
     void shouldAddNewGenre() {
-        long expected = repository.count() + 1;
-        repository.insert(new Genre("newGenre"));
+        Genre genre = new Genre("genre");
+        repository.insert(genre);
 
-        assertThat(repository.count())
-                .isEqualTo(expected);
+        long genre_id = em.getId(genre, Long.class);
+
+        assertThat(repository.findById(genre_id).getName())
+                .isEqualTo(genre.getName());
     }
 
     @Test
     @DisplayName("находит жанр по id")
     void shouldFindGenreById() {
-        Genre genre = repository.findById(1);
+        Genre genre = new Genre("genreId");
+        em.persistAndFlush(genre);
 
-        assertThat(genre.getId())
-                .isEqualTo(1);
+        Genre actual = repository.findById(em.getId(genre, Long.class));
+
+        assertThat(actual.getName())
+                .isEqualTo(genre.getName());
     }
 
     @Test
     @DisplayName("находит все жанры")
     void shouldFindAllGenres() {
-        List<Genre> genres = repository.findAll();
+        List<Genre> genreList = repository.findAll();
 
-        assertThat(genres)
+        assertThat(repository.findAll())
                 .isNotNull();
     }
 
     @Test
     @DisplayName("удаляет жанр")
     void shouldDeleteGenre() {
+        Genre genre = new Genre("delete");
         long expected = repository.count();
-        repository.insert(new Genre("delete"));
-        repository.deleteById(2);
+        em.persistAndFlush(genre);
+
+        repository.deleteById(em.getId(genre, Long.class));
 
         assertThat(repository.count())
                 .isEqualTo(expected);

@@ -12,57 +12,57 @@ public class ApplicationControl {
     private final AuthorService authorService;
     private final GenreService genreService;
     private final CommentService commentService;
-    private final PreparePrintService preparePrintService;
+    private final EntityPrinterService entityPrinterService;
 
     public ApplicationControl(BookService bookService, AuthorService authorService, GenreService genreService,
-                              CommentService commentService, PreparePrintService preparePrintService) {
+                              CommentService commentService, EntityPrinterService entityPrinterService) {
         this.bookService = bookService;
         this.authorService = authorService;
         this.genreService = genreService;
         this.commentService = commentService;
-        this.preparePrintService = preparePrintService;
+        this.entityPrinterService = entityPrinterService;
     }
 
     @ShellMethod(value = "Show all Books, Author, Genre in Library", key = "show-all")
     public String showAll() {
-        return preparePrintService.preparePrintAuthors(authorService.getAllAuthors()) +
-                preparePrintService.preparePrintBooks(bookService.getAllBooks()) +
-                preparePrintService.preparePrintGenres(genreService.getAllGenres());
+        return entityPrinterService.preparePrintAuthors(authorService.getAllAuthors()) +
+                entityPrinterService.preparePrintBooks(bookService.getAllBooks()) +
+                entityPrinterService.preparePrintGenres(genreService.getAllGenres());
     }
 
     @ShellMethod(value = "Show all books in library", key = "show-all-books")
     public String showAllBooks() {
-        return preparePrintService.preparePrintBooks(bookService.getAllBooks());
+        return entityPrinterService.preparePrintBooks(bookService.getAllBooks());
     }
 
     @ShellMethod(value = "Show all authors in library", key = "show-all-authors")
     public String showAllAuthors() {
-        return preparePrintService.preparePrintAuthors(authorService.getAllAuthors());
+        return entityPrinterService.preparePrintAuthors(authorService.getAllAuthors());
     }
 
     @ShellMethod(value = "Show all genres in library", key = "show-all-genres")
     public String showAllGenres() {
-        return preparePrintService.preparePrintGenres(genreService.getAllGenres());
+        return entityPrinterService.preparePrintGenres(genreService.getAllGenres());
     }
 
     @ShellMethod(value = "Show all comments for book", key = "show-all-comments")
     public String showAllComments(@ShellOption long book_id) {
-        return preparePrintService.preparePrintComments(commentService.getAllCommentsByBookId(book_id));
+        return entityPrinterService.preparePrintComments(commentService.getAllCommentsByBookId(book_id));
     }
 
     @ShellMethod(value = "Show all info for book", key = "show-book")
     public String showBook(@ShellOption long book_id) {
-        return preparePrintService.preparePrintBook(bookService.getBookById(book_id));
+        return entityPrinterService.preparePrintBook(bookService.getBookById(book_id));
     }
 
     @ShellMethod(value = "Show all info for author", key = "show-author")
     public String showAuthor(@ShellOption long author_id) {
-        return preparePrintService.preparePrintAuthorWithBook(bookService.getAllBookByAuthorId(author_id));
+        return entityPrinterService.preparePrintAuthorWithBook(bookService.getAllBookByAuthorId(author_id));
     }
 
     @ShellMethod(value = "Show all info for genre", key = "show-genre")
     public String showGenre(@ShellOption long genre_id) {
-        return preparePrintService.preparePrintGenreWithBook(bookService.getAllBookByGenreId(genre_id));
+        return entityPrinterService.preparePrintGenreWithBook(bookService.getAllBookByGenreId(genre_id));
     }
 
     @ShellMethod(value = "Add new book in library", key = "add-book")

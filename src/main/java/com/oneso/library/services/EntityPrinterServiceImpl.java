@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PreparePreparePrintServiceImpl implements PreparePrintService {
+public class EntityPrinterServiceImpl implements EntityPrinterService {
 
     @Override
     public String preparePrintBooks(List<Book> books) {

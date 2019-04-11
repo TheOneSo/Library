@@ -15,11 +15,11 @@ public class Book {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(targetEntity = Author.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Author.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_author")
     private Author author;
 
-    @OneToOne(targetEntity = Genre.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Genre.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_genre")
     private Genre genre;
 
@@ -27,6 +27,10 @@ public class Book {
         this.name = name;
         this.author = author;
         this.genre = genre;
+    }
+
+    public Book(long id) {
+        this.id = id;
     }
 
     public Book() {}

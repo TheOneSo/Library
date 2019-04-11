@@ -7,7 +7,7 @@ import com.oneso.library.domain.Genre;
 
 import java.util.List;
 
-public interface PreparePrintService {
+public interface EntityPrinterService {
 
     String preparePrintBooks(List<Book> books);
 
