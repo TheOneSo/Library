@@ -9,7 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,8 +30,7 @@ class BookServiceTest {
         bRepo = mock(BookRepository.class);
         service = new BookServiceImpl(bRepo);
 
-        testBook = new Book("test", new Author("test"), new Genre("test"),
-                new ArrayList<>());
+        testBook = new Book("test", new Author("test"), new Genre("test"));
     }
 
     @Test

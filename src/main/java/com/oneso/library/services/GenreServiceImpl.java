@@ -23,20 +23,13 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public String getAllGenres() {
-        StringBuilder builder = new StringBuilder();
-        List<Genre> genres = genreRepository.findAll();
-
-        genres.forEach(g -> builder.append(String.format("[Genre_%d]: %s\n", g.getId(), g.getName())));
-
-        return builder.toString();
+    public List<Genre> getAllGenres() {
+        return genreRepository.findAll();
     }
 
     @Override
-    public String getGenre(long id) {
-        Genre genre = genreRepository.findById(id);
-
-        return String.format("[Genre_%d]: %s", genre.getId(), genre.getName());
+    public Genre getGenre(long id) {
+        return genreRepository.findById(id);
     }
 
     @Override

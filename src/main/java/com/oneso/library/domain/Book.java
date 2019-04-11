@@ -15,22 +15,22 @@ public class Book {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(targetEntity = Author.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Author.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_author")
     private Author author;
 
-    @OneToOne(targetEntity = Genre.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Genre.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_genre")
     private Genre genre;
 
-    @OneToMany(targetEntity = Comment.class, mappedBy = "book", fetch = FetchType.LAZY)
-    private List<Comment> comments;
-
-    public Book(String name, Author author, Genre genre, List<Comment> comments) {
+    public Book(String name, Author author, Genre genre) {
         this.name = name;
         this.author = author;
         this.genre = genre;
-        this.comments = comments;
+    }
+
+    public Book(long id) {
+        this.id = id;
     }
 
     public Book() {}
@@ -66,13 +66,5 @@ public class Book {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
 }

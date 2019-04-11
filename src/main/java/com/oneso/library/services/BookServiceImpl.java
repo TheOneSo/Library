@@ -19,65 +19,28 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void addBook(String bookName, long author_id, long genre_id) {
-        Author author = new Author();
-        author.setId(author_id);
-        Genre genre = new Genre();
-        genre.setId(genre_id);
-
-        Book book = new Book();
-        book.setName(bookName);
-        book.setAuthor(author);
-        book.setGenre(genre);
-
+        Book book = new Book(bookName, new Author(author_id), new Genre(genre_id));
         bookRepository.insert(book);
     }
 
     @Override
-    public String getAllBooks() {
-        StringBuilder builder = new StringBuilder();
-        List<Book> books = bookRepository.findAll();
-
-        books.forEach(b -> builder.append(String.format("[Book_%d]: %s\n", b.getId(), b.getName())));
-
-        return builder.toString();
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
     }
 
     @Override
-    public String getBookById(long id) {
-        StringBuilder builder = new StringBuilder();
-        Book book = bookRepository.findById(id);
-
-        builder.append(String.format("[Author]: %s\n", book.getAuthor().getName()));
-        builder.append(String.format("[Book]: %s\n", book.getName()));
-        builder.append(String.format("[Genre]: %s\n", book.getGenre().getName()));
-
-        return builder.toString();
+    public Book getBookById(long id) {
+        return bookRepository.findById(id);
     }
 
     @Override
-    public String getAllBookByAuthorId(long author_id) {
-        StringBuilder builder = new StringBuilder();
-        List<Book> books = bookRepository.findAllBookByAuthorId(author_id);
-
-        builder.append(String.format("[Author_%d]: %s\n",
-                books.get(0).getAuthor().getId(), books.get(0).getAuthor().getName()));
-
-        books.forEach(b -> builder.append(String.format("[Book_%d]: %s\n", b.getId(), b.getName())));
-
-        return builder.toString();
+    public List<Book> getAllBookByAuthorId(long author_id) {
+        return bookRepository.findAllBookByAuthorId(author_id);
     }
 
     @Override
-    public String getAllBookByGenreId(long genre_id) {
-        StringBuilder builder = new StringBuilder();
-        List<Book> books = bookRepository.findAllBookByGenreId(genre_id);
-
-        builder.append(String.format("[Genre_%d]: %s\n",
-                books.get(0).getGenre().getId(), books.get(0).getGenre().getName()));
-
-        books.forEach(b -> builder.append(String.format("[Book_%d]: %s\n", b.getId(), b.getName())));
-
-        return builder.toString();
+    public List<Book> getAllBookByGenreId(long genre_id) {
+        return bookRepository.findAllBookByGenreId(genre_id);
     }
 
     @Override

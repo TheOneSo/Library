@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - includeAll:
+      path: db/changelog/1.0/
+  - include:
+      file: classpath:/db.changelog/testdata/testdata.yml
+#  - include:
+#      file: classpath:/db.changelog/testdata/testdata.sql

@@ -18,6 +18,10 @@ public class Author {
         this.name = name;
     }
 
+    public Author(long id) {
+        this.id = id;
+    }
+
     public Author() {}
 
     public long getId() {

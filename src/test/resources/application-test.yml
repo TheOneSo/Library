@@ -3,10 +3,18 @@ spring:
     interactive:
       enabled: false
 
-  datasource:
-    initialization-mode: always
-    url: jdbc:h2:mem:db1;MODE=PostgreSQL
-    data: testdata.sql
+#  datasource:
+#    initialization-mode: always
+#    url: jdbc:h2:mem:db1;MODE=PostgreSQL
+#    schema: schema.sql
+#    data: testdata.sql
 
   liquibase:
-    enabled: false
+    enabled: true
+    drop-first: true
+    url: jdbc:h2:mem:db1;MODE=PostgreSQL
+    change-log: classpath:/db.changelog/db.changelog-master-test.yaml
+
+  jpa:
+    hibernate:
+      ddl-auto: none

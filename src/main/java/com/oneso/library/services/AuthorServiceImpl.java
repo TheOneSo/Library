@@ -22,20 +22,13 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public String getAuthor(long id) {
-        Author author = authorRepository.findById(id);
-
-        return String.format("[Author_%d]: %s", author.getId(), author.getName());
+    public Author getAuthor(long id) {
+        return authorRepository.findById(id);
     }
 
     @Override
-    public String getAllAuthors() {
-        StringBuilder builder = new StringBuilder();
-        List<Author> authors = authorRepository.findAll();
-
-        authors.forEach(a -> builder.append(String.format("[Author_%d]: %s\n", a.getId(), a.getName())));
-
-        return builder.toString();
+    public List<Author> getAllAuthors() {
+        return authorRepository.findAll();
     }
 
     @Override
