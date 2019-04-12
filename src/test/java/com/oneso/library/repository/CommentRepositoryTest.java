@@ -29,7 +29,7 @@ class CommentRepositoryTest {
     @Test
     @DisplayName("добавляет новый комментарий")
     void shouldAddNewComment() {
-        Comment comment = new Comment("comment", null);
+        Comment comment = new Comment("comment", new Book(1));
         repository.insert(comment);
 
         long comment_id = em.getId(comment, Long.class);
