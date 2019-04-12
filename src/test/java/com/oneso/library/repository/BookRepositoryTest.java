@@ -30,7 +30,7 @@ class BookRepositoryTest {
     @Test
     @DisplayName("добавляет новую книгу")
     void shouldAddNewBook() {
-        Book book = new Book("test", null, null);
+        Book book = new Book("test", new Author(1), new Genre(1));
         repository.insert(book);
 
         long book_id = em.getId(book, Long.class);
@@ -63,8 +63,10 @@ class BookRepositoryTest {
     @Test
     @DisplayName("находит все книги")
     void shouldFindAllBooks() {
-        assertThat(repository.findAll())
-                .isNotNull();
+        List<Book> books = repository.findAll();
+
+        assertThat(books.get(0).getName())
+                .isEqualTo("testB");
     }
 
     @Test
@@ -74,7 +76,7 @@ class BookRepositoryTest {
         em.persistAndFlush(author);
         long author_id = em.getId(author, Long.class);
 
-        Book book = new Book("author book", new Author(author_id), null);
+        Book book = new Book("author book", new Author(author_id), new Genre(1));
         em.persistAndFlush(book);
 
         List<Book> actuals = repository.findAllBookByAuthorId(author_id);
@@ -90,7 +92,7 @@ class BookRepositoryTest {
         em.persistAndFlush(genre);
         long genre_id = em.getId(genre, Long.class);
 
-        Book book = new Book("genre book", null, new Genre(genre_id));
+        Book book = new Book("genre book", new Author(1), new Genre(genre_id));
         em.persistAndFlush(book);
 
         List<Book> actuals = repository.findAllBookByGenreId(genre_id);
@@ -102,7 +104,7 @@ class BookRepositoryTest {
     @Test
     @DisplayName("удаляет книгу по id")
     void shouldDeleteBookById() {
-        Book book = new Book("delete", null, null);
+        Book book = new Book("delete", new Author(1), new Genre(1));
         long expected = repository.count();
         em.persist(book);
         em.flush();

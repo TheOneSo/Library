@@ -52,10 +52,10 @@ class GenreRepositoryTest {
     @Test
     @DisplayName("находит все жанры")
     void shouldFindAllGenres() {
-        List<Genre> genreList = repository.findAll();
+        List<Genre> genres = repository.findAll();
 
-        assertThat(repository.findAll())
-                .isNotNull();
+        assertThat(genres.get(0).getName())
+                .isEqualTo("testG");
     }
 
     @Test
