@@ -1,18 +1,15 @@
 package com.oneso.library.repository;
 
 import com.oneso.library.domain.Genre;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface GenreRepository {
-
-    void insert(Genre genre);
-
-    Genre findById(long id);
+public interface GenreRepository extends PagingAndSortingRepository<Genre, Long> {
 
     List<Genre> findAll();
 
-    long count();
-
-    long deleteById(long id);
+    Optional<Genre> findGenreByName(String name);
 }

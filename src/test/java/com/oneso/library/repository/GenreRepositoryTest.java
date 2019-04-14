@@ -6,15 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
-@Import(GenreRepositoryJpa.class)
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @DisplayName("Репозиторий для работы с жанрами")
 class GenreRepositoryTest {
@@ -29,11 +28,11 @@ class GenreRepositoryTest {
     @DisplayName("добавляет новый жанр")
     void shouldAddNewGenre() {
         Genre genre = new Genre("genre");
-        repository.insert(genre);
+        repository.save(genre);
 
         long genre_id = em.getId(genre, Long.class);
 
-        assertThat(repository.findById(genre_id).getName())
+        assertThat(repository.findById(genre_id).get().getName())
                 .isEqualTo(genre.getName());
     }
 
@@ -43,9 +42,9 @@ class GenreRepositoryTest {
         Genre genre = new Genre("genreId");
         em.persistAndFlush(genre);
 
-        Genre actual = repository.findById(em.getId(genre, Long.class));
+        Optional<Genre> actual = repository.findGenreByName("genreId");
 
-        assertThat(actual.getName())
+        assertThat(actual.get().getName())
                 .isEqualTo(genre.getName());
     }
 

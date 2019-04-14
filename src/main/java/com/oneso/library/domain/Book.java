@@ -1,10 +1,10 @@
 package com.oneso.library.domain;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "book")
+@NamedEntityGraph(name = "bookGraph", includeAllAttributes = true)
 public class Book {
 
     @Id

@@ -27,15 +27,15 @@ class CommentServiceTest {
     void shouldAddNewCommentForBook() {
         service.addComment("test", 1);
 
-        verify(cRepo, times(1)).insert(any());
+        verify(cRepo, times(1)).save(any());
     }
 
     @Test
-    @DisplayName("показывает все комментарии к книге")
-    void shouldShowAllCommentsForBook() {
+    @DisplayName("возвращает список комментариев к книге")
+    void shouldReturnListCommentForBook() {
         service.getAllCommentsByBookId(1);
 
-        verify(cRepo, times(1)).findByBookId(1);
+        verify(cRepo, times(1)).findCommentByBookId(anyLong());
     }
 
     @Test
@@ -43,6 +43,6 @@ class CommentServiceTest {
     void shouldDeleteComment() {
         service.deleteById(1);
 
-        verify(cRepo, times(1)).deleteById(1);
+        verify(cRepo, times(1)).deleteById(anyLong());
     }
 }

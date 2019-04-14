@@ -4,19 +4,17 @@ import com.oneso.library.domain.Author;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
-@Import(AuthorRepositoryJpa.class)
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @DisplayName("Репозиторий по работе с авторами")
 class AuthorRepositoryTest {
@@ -31,11 +29,11 @@ class AuthorRepositoryTest {
     @DisplayName("добавляет нового автора")
     void shouldAddNewAuthor() {
         Author author = new Author("test");
-        repository.insert(author);
+        repository.save(author);
 
         long author_id = em.getId(author, Long.class);
 
-        assertThat(repository.findById(author_id).getName())
+        assertThat(repository.findById(author_id).get().getName())
                 .isEqualTo(author.getName());
     }
 
@@ -46,18 +44,16 @@ class AuthorRepositoryTest {
         em.persist(author);
         em.flush();
 
-        long author_id = em.getId(author, Long.class);
+        Optional<Author> actual = repository.findAuthorByName(author.getName());
 
-        Author actual = repository.findById(author_id);
-
-        assertThat(actual.getName())
+        assertThat(actual.get().getName())
                 .isEqualTo(author.getName());
     }
 
     @Test
     @DisplayName("находит всех авторов")
     void shouldFindAllAuthorsById() {
-        List<Author> authors = repository.findAll();
+        List<Author> authors = repository.findAll(Sort.by(Sort.Order.asc("name")));
 
         assertThat(authors.get(0).getName())
                 .isEqualTo("testA");

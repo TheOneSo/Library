@@ -10,7 +10,9 @@ public interface BookService {
 
     List<Book> getAllBooks();
 
-    Book getBookById(long id);
+    Book getBook(long id);
+
+    Book getBook(String name);
 
     List<Book> getAllBookByAuthorId(long author_id);
 

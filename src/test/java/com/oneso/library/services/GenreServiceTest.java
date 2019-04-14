@@ -9,6 +9,7 @@ import org.mockito.Mock;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -35,7 +36,7 @@ class GenreServiceTest {
     void shouldAddNewGenre() {
         service.addGenre("test");
 
-        verify(gRepo, times(1)).insert(any());
+        verify(gRepo, times(1)).save(any());
     }
 
     @Test
@@ -51,10 +52,19 @@ class GenreServiceTest {
     @Test
     @DisplayName("возвращает жанр по id")
     void shouldReturnGenreById() {
-        when(gRepo.findById(anyLong())).thenReturn(genreTest);
+        when(gRepo.findById(anyLong())).thenReturn(Optional.of(genreTest));
 
         assertNotNull(service.getGenre(1));
         verify(gRepo, times(1)).findById(anyLong());
+    }
+
+    @Test
+    @DisplayName("возвращает жанр по имени")
+    void shouldReturnGenreByName() {
+        when(gRepo.findGenreByName(anyString())).thenReturn(Optional.of(genreTest));
+
+        assertNotNull(service.getGenre("test"));
+        verify(gRepo, times(1)).findGenreByName(anyString());
     }
 
     @Test
@@ -62,6 +72,6 @@ class GenreServiceTest {
     void shouldDeleteGenre() {
         service.deleteGenre(1);
 
-        verify(gRepo, times(1)).deleteById(1);
+        verify(gRepo, times(1)).deleteById(anyLong());
     }
 }

@@ -1,22 +1,26 @@
 package com.oneso.library.repository;
 
 import com.oneso.library.domain.Book;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface BookRepository {
+public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
 
-    void insert(Book book);
+    Optional<Book> findBookByName(String name);
 
-    Book findById(long id);
-
+    @EntityGraph("bookGraph")
     List<Book> findAll();
 
-    long count();
+//    @Query("select b from Book b join fetch b.author where b.author.id = :author_id")
+    @EntityGraph("bookGraph")
+    List<Book> findBookByAuthorId(long author_id);
 
-    List<Book> findAllBookByAuthorId(long author_id);
-
-    List<Book> findAllBookByGenreId(long author_id);
-
-    long deleteById(long id);
+//    @Query("select b from Book b join fetch b.genre where b.genre.id = :genre_id")
+    @EntityGraph("bookGraph")
+    List<Book> findBookByGenreId(long genre_id);
 }
