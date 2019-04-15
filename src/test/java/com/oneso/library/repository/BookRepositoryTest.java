@@ -8,15 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
-@Import(BookRepositoryJpa.class)
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @DisplayName("Репозиторий по работе с книгами")
 class BookRepositoryTest {
@@ -31,11 +30,11 @@ class BookRepositoryTest {
     @DisplayName("добавляет новую книгу")
     void shouldAddNewBook() {
         Book book = new Book("test", new Author(1), new Genre(1));
-        repository.insert(book);
+        repository.save(book);
 
         long book_id = em.getId(book, Long.class);
 
-        assertThat(repository.findById(book_id).getName())
+        assertThat(repository.findById(book_id).get().getName())
                 .isEqualTo(book.getName());
     }
 
@@ -46,17 +45,15 @@ class BookRepositoryTest {
         em.persist(book);
         em.flush();
 
-        long book_id = em.getId(book, Long.class);
+        Optional<Book> actual = repository.findBookByName("book");
 
-        Book actual = repository.findById(book_id);
-
-        assertThat(actual.getName())
+        assertThat(actual.get().getName())
                 .isEqualTo(book.getName());
 
-        assertThat(actual.getAuthor().getId())
+        assertThat(actual.get().getAuthor().getId())
                 .isEqualTo(book.getAuthor().getId());
 
-        assertThat(actual.getGenre().getId())
+        assertThat(actual.get().getGenre().getId())
                 .isEqualTo(book.getGenre().getId());
     }
 
@@ -79,7 +76,7 @@ class BookRepositoryTest {
         Book book = new Book("author book", new Author(author_id), new Genre(1));
         em.persistAndFlush(book);
 
-        List<Book> actuals = repository.findAllBookByAuthorId(author_id);
+        List<Book> actuals = repository.findBookByAuthorId(author_id);
 
         assertThat(actuals.get(0).getName())
                 .isEqualTo(book.getName());
@@ -95,7 +92,7 @@ class BookRepositoryTest {
         Book book = new Book("genre book", new Author(1), new Genre(genre_id));
         em.persistAndFlush(book);
 
-        List<Book> actuals = repository.findAllBookByGenreId(genre_id);
+        List<Book> actuals = repository.findBookByGenreId(genre_id);
 
         assertThat(actuals.get(0).getName())
                 .isEqualTo(book.getName());

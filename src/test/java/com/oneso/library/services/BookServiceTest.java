@@ -11,6 +11,7 @@ import org.mockito.Mock;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,12 +39,12 @@ class BookServiceTest {
     void shouldAddNewBook() {
         service.addBook("test", 1, 1);
 
-        verify(bRepo, times(1)).insert(any());
+        verify(bRepo, times(1)).save(any());
     }
 
     @Test
-    @DisplayName("показывает все книги")
-    void shouldShowAllBooks() {
+    @DisplayName("возвращает список всех книг")
+    void shouldReturnListAllBook() {
         List<Book> books = Collections.singletonList(testBook);
         when(bRepo.findAll()).thenReturn(books);
 
@@ -52,32 +53,41 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("выводит книгу по id")
+    @DisplayName("возвращает книгу по id")
     void shouldReturnBookById() {
-        when(bRepo.findById(1)).thenReturn(testBook);
+        when(bRepo.findById(anyLong())).thenReturn(Optional.of(testBook));
 
-        assertNotNull(service.getBookById(1));
-        verify(bRepo, times(1)).findById(1);
+        assertNotNull(service.getBook(1));
+        verify(bRepo, times(1)).findById(anyLong());
     }
 
     @Test
-    @DisplayName("выводит все книги по автора")
+    @DisplayName("возвращает книгу по имени")
+    void shouldReturnBookByName() {
+        when(bRepo.findBookByName(anyString())).thenReturn(Optional.of(testBook));
+
+        assertNotNull(service.getBook("test"));
+        verify(bRepo, times(1)).findBookByName(anyString());
+    }
+
+    @Test
+    @DisplayName("возвращает все книги по автора")
     void shouldReturnAllBooksForAuthor() {
         List<Book> books = Collections.singletonList(testBook);
-        when(bRepo.findAllBookByAuthorId(1)).thenReturn(books);
+        when(bRepo.findBookByAuthorId(anyLong())).thenReturn(books);
 
         assertNotNull(service.getAllBookByAuthorId(1));
-        verify(bRepo, times(1)).findAllBookByAuthorId(1);
+        verify(bRepo, times(1)).findBookByAuthorId(anyLong());
     }
 
     @Test
-    @DisplayName("выводит все книги по жанру")
+    @DisplayName("возвращает все книги по жанру")
     void shouldReturnAllBooksForGenre() {
         List<Book> books = Collections.singletonList(testBook);
-        when(bRepo.findAllBookByGenreId(1)).thenReturn(books);
+        when(bRepo.findBookByGenreId(anyLong())).thenReturn(books);
 
         assertNotNull(service.getAllBookByGenreId(1));
-        verify(bRepo, times(1)).findAllBookByGenreId(1);
+        verify(bRepo, times(1)).findBookByGenreId(anyLong());
     }
 
     @Test
@@ -85,6 +95,6 @@ class BookServiceTest {
     void shouldDeleteBook() {
         service.deleteBook(1);
 
-        verify(bRepo, times(1)).deleteById(1);
+        verify(bRepo, times(1)).deleteById(anyLong());
     }
 }

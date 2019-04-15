@@ -52,7 +52,7 @@ public class ApplicationControl {
 
     @ShellMethod(value = "Show all info for book", key = "show-book")
     public String showBook(@ShellOption long book_id) {
-        return entityPrinterService.preparePrintBook(bookService.getBookById(book_id));
+        return entityPrinterService.preparePrintBook(bookService.getBook(book_id));
     }
 
     @ShellMethod(value = "Show all info for author", key = "show-author")

@@ -7,15 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
-@Import(CommentRepositoryJpa.class)
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @DisplayName("Репозиторий по работе с комментариями")
 class CommentRepositoryTest {
@@ -30,20 +29,20 @@ class CommentRepositoryTest {
     @DisplayName("добавляет новый комментарий")
     void shouldAddNewComment() {
         Comment comment = new Comment("comment", new Book(1));
-        repository.insert(comment);
+        repository.save(comment);
 
         long comment_id = em.getId(comment, Long.class);
 
-        assertThat(repository.findById(comment_id).getText())
+        assertThat(repository.findById(comment_id).get().getText())
                 .isEqualTo(comment.getText());
     }
 
     @Test
     @DisplayName("находит комментарий по id")
     void shouldFindCommentById() {
-        Comment comment = repository.findById(1);
+        Optional<Comment> actual = repository.findById(1L);
 
-        assertThat(comment.getText())
+        assertThat(actual.get().getText())
                 .isEqualTo("testC");
     }
 
@@ -53,7 +52,7 @@ class CommentRepositoryTest {
         Comment comment = new Comment("text", new Book(1));
         em.persistAndFlush(comment);
 
-        List<Comment> comments = repository.findByBookId(1);
+        List<Comment> comments = repository.findCommentByBookId(1);
 
         assertThat(comments.contains(comment))
                 .isTrue();

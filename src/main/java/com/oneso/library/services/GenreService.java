@@ -12,5 +12,7 @@ public interface GenreService {
 
     Genre getGenre(long id);
 
+    Genre getGenre(String name);
+
     void deleteGenre(long id);
 }

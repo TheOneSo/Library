@@ -1,18 +1,15 @@
 package com.oneso.library.repository;
 
 import com.oneso.library.domain.Author;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface AuthorRepository {
+public interface AuthorRepository extends PagingAndSortingRepository<Author, Long> {
 
-    void insert(Author author);
+    List<Author> findAll(Sort sort);
 
-    Author findById(long id);
-
-    long count();
-
-    List<Author> findAll();
-
-    long deleteById(long id);
+    Optional<Author> findAuthorByName(String name);
 }

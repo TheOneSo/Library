@@ -22,12 +22,12 @@ public class CommentServiceImpl implements CommentService {
         book.setId(book_id);
 
         Comment comment = new Comment(text, book);
-        commentRepository.insert(comment);
+        commentRepository.save(comment);
     }
 
     @Override
     public List<Comment> getAllCommentsByBookId(long book_id) {
-        return commentRepository.findByBookId(book_id);
+        return commentRepository.findCommentByBookId(book_id);
     }
 
     @Override
