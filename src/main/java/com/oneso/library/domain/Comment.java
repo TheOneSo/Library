@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "comment")
+@NamedEntityGraph(name = "commentGraph", includeAllAttributes = true)
 public class Comment {
 
     @Id
