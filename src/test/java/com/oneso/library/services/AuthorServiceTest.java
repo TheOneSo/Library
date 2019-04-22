@@ -36,15 +36,6 @@ class AuthorServiceTest {
     }
 
     @Test
-    @DisplayName("возвращает автора по id")
-    void shouldReturnAuthorById() {
-        when(aRepo.findById(anyLong())).thenReturn(Optional.of(new Author()));
-
-        assertNotNull(service.getAuthor(1));
-        verify(aRepo, times(1)).findById(anyLong());
-    }
-
-    @Test
     @DisplayName("возвращает автора по имени")
     void shouldReturnAuthorByName() {
         when(aRepo.findAuthorByName(anyString())).thenReturn(Optional.of(new Author()));
@@ -58,14 +49,14 @@ class AuthorServiceTest {
     void shouldGetListAuthors() {
         service.getAllAuthors();
 
-        verify(aRepo, times(1)).findAll(Sort.by(Sort.Order.asc("name")));
+        verify(aRepo, times(1)).findAll();
     }
 
     @Test
     @DisplayName("удаляет автора")
     void shouldDeleteAuthor() {
-        service.deleteAuthor(1);
+        service.deleteAuthor("qwe");
 
-        verify(aRepo, times(1)).deleteById(anyLong());
+        verify(aRepo, times(1)).deleteAuthorByName(anyString());
     }
 }

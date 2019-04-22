@@ -1,22 +1,26 @@
 package com.oneso.library.repository;
 
 import com.oneso.library.domain.Book;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
+public interface BookRepository extends MongoRepository<Book, String> {
 
     Optional<Book> findBookByName(String name);
 
-    @EntityGraph("bookGraph")
-    List<Book> findAll();
+    @Query("{ 'author.name': :#{#name} }")
+    List<Book>  findBookByAuthorName(@Param("name") String name);
 
-    @EntityGraph("bookGraph")
-    List<Book> findBookByAuthorId(long author_id);
+    @Query("{ 'genre.name': :#{#name} }")
+    List<Book> findBookByGenreName(@Param("name") String name);
 
-    @EntityGraph("bookGraph")
-    List<Book> findBookByGenreId(long genre_id);
+    void deleteBookByName(String name);
+
+    void deleteBookByAuthorId(String id);
+
+    void deleteBookByAuthorName(String name);
 }

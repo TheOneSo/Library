@@ -1,20 +1,22 @@
 package com.oneso.library.repository;
 
+import com.oneso.library.domain.Author;
 import com.oneso.library.domain.Book;
 import com.oneso.library.domain.Comment;
+import com.oneso.library.domain.Genre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@DataJpaTest
+@DataMongoTest
+@ComponentScan({"com.oneso.library.repository", "com.oneso.library.events"})
+@DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @DisplayName("Репозиторий по работе с комментариями")
 class CommentRepositoryTest {
@@ -22,50 +24,24 @@ class CommentRepositoryTest {
     @Autowired
     private CommentRepository repository;
 
-    @Autowired
-    private TestEntityManager em;
-
     @Test
     @DisplayName("добавляет новый комментарий")
     void shouldAddNewComment() {
-        Comment comment = new Comment("comment", new Book(1));
+        Comment comment = new Comment("comment", new Book("test", new Author("test"), new Genre("test")));
         repository.save(comment);
 
-        long comment_id = em.getId(comment, Long.class);
-
-        assertThat(repository.findById(comment_id).get().getText())
+        assertThat(repository.findCommentByBookName("test").get(0).getText())
                 .isEqualTo(comment.getText());
-    }
-
-    @Test
-    @DisplayName("находит комментарий по id")
-    void shouldFindCommentById() {
-        Optional<Comment> actual = repository.findById(1L);
-
-        assertThat(actual.get().getText())
-                .isEqualTo("testC");
-    }
-
-    @Test
-    @DisplayName("находит комментарии по id книги")
-    void shouldFindCommentsByBookId() {
-        Comment comment = new Comment("text", new Book(1));
-        em.persistAndFlush(comment);
-
-        List<Comment> comments = repository.findCommentByBookId(1);
-
-        assertThat(comments.contains(comment))
-                .isTrue();
     }
 
     @Test
     @DisplayName("удаляет комментарий")
     void shouldDeleteComment() {
-        Comment comment = new Comment("delete", new Book(1));
+        Comment comment = new Comment("delete", new Book());
         long expected = repository.count();
-        em.persistAndFlush(comment);
+        repository.save(comment);
 
-        repository.deleteById(em.getId(comment, Long.class));
+        repository.delete(comment);
 
         assertThat(repository.count())
                 .isEqualTo(expected);

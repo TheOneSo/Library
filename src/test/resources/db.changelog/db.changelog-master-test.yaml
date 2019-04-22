@@ -1,5 +1,5 @@
 databaseChangeLog:
   - includeAll:
-      path: db/changelog/1.0/
+      path: db/changelogs/1.0/
   - include:
-      file: classpath:/db.changelog/testdata/testdata.yml
+      file: classpath:/db.changelogs/testdata/testdata.yml

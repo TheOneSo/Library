@@ -1,21 +1,21 @@
 package com.oneso.library.domain;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Entity
-@Table(name = "comment")
-@NamedEntityGraph(name = "commentGraph", includeAllAttributes = true)
+@Document(collection = "comment")
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    @Column(name = "text")
+    @Field("text")
     private String text;
 
-    @ManyToOne(targetEntity = Book.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_book")
+    //@DBRef
+    @Field("book")
     private Book book;
 
     public Comment(String name, Book book) {
@@ -24,14 +24,6 @@ public class Comment {
     }
 
     public Comment() {}
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public Book getBook() {
         return book;
@@ -47,5 +39,13 @@ public class Comment {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

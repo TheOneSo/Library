@@ -29,17 +29,12 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre getGenre(long id) {
-        return genreRepository.findById(id).orElseGet(Genre::new);
-    }
-
-    @Override
     public Genre getGenre(String name) {
         return genreRepository.findGenreByName(name).orElseGet(Genre::new);
     }
 
     @Override
-    public void deleteGenre(long id) {
-        genreRepository.deleteById(id);
+    public void deleteGenre(String name) {
+        genreRepository.deleteById(name);
     }
 }

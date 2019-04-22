@@ -4,8 +4,9 @@ import com.oneso.library.domain.Genre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
@@ -13,7 +14,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@DataJpaTest
+@DataMongoTest
+@ComponentScan({"com.oneso.library.repository", "com.oneso.library.events"})
+@DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @DisplayName("Репозиторий для работы с жанрами")
 class GenreRepositoryTest {
@@ -21,28 +24,23 @@ class GenreRepositoryTest {
     @Autowired
     private GenreRepository repository;
 
-    @Autowired
-    private TestEntityManager em;
-
     @Test
     @DisplayName("добавляет новый жанр")
     void shouldAddNewGenre() {
         Genre genre = new Genre("genre");
         repository.save(genre);
 
-        long genre_id = em.getId(genre, Long.class);
-
-        assertThat(repository.findById(genre_id).get().getName())
+        assertThat(repository.findGenreByName(genre.getName()).get().getName())
                 .isEqualTo(genre.getName());
     }
 
     @Test
-    @DisplayName("находит жанр по id")
-    void shouldFindGenreById() {
+    @DisplayName("находит жанр")
+    void shouldFindGenre() {
         Genre genre = new Genre("genreId");
-        em.persistAndFlush(genre);
+        repository.save(genre);
 
-        Optional<Genre> actual = repository.findGenreByName("genreId");
+        Optional<Genre> actual = repository.findGenreByName(genre.getName());
 
         assertThat(actual.get().getName())
                 .isEqualTo(genre.getName());
@@ -51,10 +49,12 @@ class GenreRepositoryTest {
     @Test
     @DisplayName("находит все жанры")
     void shouldFindAllGenres() {
+        Genre genre = new Genre("test");
+        repository.save(genre);
         List<Genre> genres = repository.findAll();
 
         assertThat(genres.get(0).getName())
-                .isEqualTo("testG");
+                .isNotNull();
     }
 
     @Test
@@ -62,9 +62,9 @@ class GenreRepositoryTest {
     void shouldDeleteGenre() {
         Genre genre = new Genre("delete");
         long expected = repository.count();
-        em.persistAndFlush(genre);
+        repository.save(genre);
 
-        repository.deleteById(em.getId(genre, Long.class));
+        repository.deleteGenreByName("delete");
 
         assertThat(repository.count())
                 .isEqualTo(expected);
