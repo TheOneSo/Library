@@ -25,7 +25,7 @@ class CommentServiceTest {
     @Test
     @DisplayName("добавляет новый комментарий к книге")
     void shouldAddNewCommentForBook() {
-        service.addComment("test", 1);
+        service.addComment("test", "qwe");
 
         verify(cRepo, times(1)).save(any());
     }
@@ -33,16 +33,16 @@ class CommentServiceTest {
     @Test
     @DisplayName("возвращает список комментариев к книге")
     void shouldReturnListCommentForBook() {
-        service.getAllCommentsByBookId(1);
+        service.getAllCommentsByBookName("qwe");
 
-        verify(cRepo, times(1)).findCommentByBookId(anyLong());
+        verify(cRepo, times(1)).findCommentByBookName(anyString());
     }
 
     @Test
     @DisplayName("удаляет комментарий")
     void shouldDeleteComment() {
-        service.deleteById(1);
+        service.deleteById("qwe");
 
-        verify(cRepo, times(1)).deleteById(anyLong());
+        verify(cRepo, times(1)).deleteById(anyString());
     }
 }

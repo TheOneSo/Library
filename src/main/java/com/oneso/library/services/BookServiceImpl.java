@@ -4,7 +4,6 @@ import com.oneso.library.domain.Author;
 import com.oneso.library.domain.Book;
 import com.oneso.library.domain.Genre;
 import com.oneso.library.repository.BookRepository;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +18,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void addBook(String bookName, long author_id, long genre_id) {
-        Book book = new Book(bookName, new Author(author_id), new Genre(genre_id));
+    public void addBook(String bookName, String author_name, String genre_name) {
+        Book book = new Book(bookName, new Author(author_name), new Genre(genre_name));
         bookRepository.save(book);
     }
 
@@ -30,27 +29,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book getBook(long id) {
-        return bookRepository.findById(id).orElseGet(Book::new);
-    }
-
-    @Override
     public Book getBook(String name) {
         return bookRepository.findBookByName(name).orElseGet(Book::new);
     }
 
     @Override
-    public List<Book> getAllBookByAuthorId(long author_id) {
-        return bookRepository.findBookByAuthorId(author_id);
+    public List<Book> getAllBookByAuthorName(String name) {
+        return bookRepository.findBookByAuthorName(name);
     }
 
     @Override
-    public List<Book> getAllBookByGenreId(long genre_id) {
-        return bookRepository.findBookByGenreId(genre_id);
+    public List<Book> getAllBookByGenreName(String name) {
+        return bookRepository.findBookByGenreName(name);
     }
 
     @Override
-    public void deleteBook(long id) {
-        bookRepository.deleteById(id);
+    public void deleteBook(String name) {
+        bookRepository.deleteBookByName(name);
     }
 }

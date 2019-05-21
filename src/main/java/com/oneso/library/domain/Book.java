@@ -1,26 +1,26 @@
 package com.oneso.library.domain;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Entity
-@Table(name = "book")
-@NamedEntityGraph(name = "bookGraph", includeAllAttributes = true)
+
+@Document("book")
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    private String id;
 
-    @Column(name = "name")
+    @Field("name")
     private String name;
 
-    @ManyToOne(targetEntity = Author.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_author")
+    //@DBRef
+    @Field("author")
     private Author author;
 
-    @ManyToOne(targetEntity = Genre.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_genre")
+    //@DBRef(db = "library")
+    @Field("genre")
     private Genre genre;
 
     public Book(String name, Author author, Genre genre) {
@@ -29,20 +29,7 @@ public class Book {
         this.genre = genre;
     }
 
-    public Book(long id) {
-        this.id = id;
-    }
-
     public Book() {}
-
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -66,5 +53,13 @@ public class Book {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

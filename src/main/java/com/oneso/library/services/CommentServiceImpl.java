@@ -17,7 +17,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void addComment(String text, long book_id) {
+    public void addComment(String text, String book_id) {
         Book book = new Book();
         book.setId(book_id);
 
@@ -26,12 +26,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getAllCommentsByBookId(long book_id) {
-        return commentRepository.findCommentByBookId(book_id);
+    public List<Comment> getAllCommentsByBookName(String name) {
+        return commentRepository.findCommentByBookName(name);
     }
 
     @Override
-    public void deleteById(long id) {
+    public void deleteById(String id) {
         commentRepository.deleteById(id);
     }
 }

@@ -4,17 +4,18 @@ import com.oneso.library.domain.Author;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.data.domain.Sort;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@DataJpaTest
+@DataMongoTest
+@ComponentScan({"com.oneso.library.repository", "com.oneso.library.events"})
+@DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @DisplayName("Репозиторий по работе с авторами")
 class AuthorRepositoryTest {
@@ -22,54 +23,39 @@ class AuthorRepositoryTest {
     @Autowired
     private AuthorRepository repository;
 
-    @Autowired
-    private TestEntityManager em;
-
     @Test
     @DisplayName("добавляет нового автора")
     void shouldAddNewAuthor() {
         Author author = new Author("test");
         repository.save(author);
 
-        long author_id = em.getId(author, Long.class);
-
-        assertThat(repository.findById(author_id).get().getName())
+        assertThat(repository.findAuthorByName("test").get().getName())
                 .isEqualTo(author.getName());
     }
 
-    @Test
-    @DisplayName("находит автора по id")
-    void shouldFindAuthorById() {
-        Author author = new Author("author");
-        em.persist(author);
-        em.flush();
-
-        Optional<Author> actual = repository.findAuthorByName(author.getName());
-
-        assertThat(actual.get().getName())
-                .isEqualTo(author.getName());
-    }
 
     @Test
     @DisplayName("находит всех авторов")
     void shouldFindAllAuthorsById() {
-        List<Author> authors = repository.findAll(Sort.by(Sort.Order.asc("name")));
+        Author author = new Author("qwe");
+        repository.save(author);
 
-        assertThat(authors.get(0).getName())
-                .isEqualTo("testA");
+        List<Author> authors = repository.findAll();
+
+        assertThat(authors.get(0))
+                .isNotNull();
     }
 
     @Test
-    @DisplayName("удаляет автора по id")
-    void shouldDeleteAuthorById() {
+    @DisplayName("удаляет автора")
+    void shouldDeleteAuthor() {
         Author author = new Author("delA");
         long expected = repository.count();
-        em.persist(author);
-        em.flush();
+        repository.save(author);
 
-        long author_id = em.getId(author, Long.class);
+        Author actual = repository.findAuthorByName("delA").get();
 
-        repository.deleteById(author_id);
+        repository.deleteAuthorByName(actual.getName());
 
         assertThat(repository.count())
                 .isEqualTo(expected);

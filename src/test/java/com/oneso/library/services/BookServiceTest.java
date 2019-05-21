@@ -37,7 +37,7 @@ class BookServiceTest {
     @Test
     @DisplayName("добавляет новую книгу")
     void shouldAddNewBook() {
-        service.addBook("test", 1, 1);
+        service.addBook("test", "qwe", "qwe");
 
         verify(bRepo, times(1)).save(any());
     }
@@ -53,15 +53,6 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("возвращает книгу по id")
-    void shouldReturnBookById() {
-        when(bRepo.findById(anyLong())).thenReturn(Optional.of(testBook));
-
-        assertNotNull(service.getBook(1));
-        verify(bRepo, times(1)).findById(anyLong());
-    }
-
-    @Test
     @DisplayName("возвращает книгу по имени")
     void shouldReturnBookByName() {
         when(bRepo.findBookByName(anyString())).thenReturn(Optional.of(testBook));
@@ -71,30 +62,30 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("возвращает все книги по автора")
-    void shouldReturnAllBooksForAuthor() {
+    @DisplayName("возвращает все книги автора")
+    void shouldReturnAllBooksAuthor() {
         List<Book> books = Collections.singletonList(testBook);
-        when(bRepo.findBookByAuthorId(anyLong())).thenReturn(books);
+        when(bRepo.findBookByAuthorName(anyString())).thenReturn(books);
 
-        assertNotNull(service.getAllBookByAuthorId(1));
-        verify(bRepo, times(1)).findBookByAuthorId(anyLong());
+        assertNotNull(service.getAllBookByAuthorName("asd"));
+        verify(bRepo, times(1)).findBookByAuthorName(anyString());
     }
 
     @Test
     @DisplayName("возвращает все книги по жанру")
     void shouldReturnAllBooksForGenre() {
         List<Book> books = Collections.singletonList(testBook);
-        when(bRepo.findBookByGenreId(anyLong())).thenReturn(books);
+        when(bRepo.findBookByGenreName(anyString())).thenReturn(books);
 
-        assertNotNull(service.getAllBookByGenreId(1));
-        verify(bRepo, times(1)).findBookByGenreId(anyLong());
+        assertNotNull(service.getAllBookByGenreName("asd"));
+        verify(bRepo, times(1)).findBookByGenreName(anyString());
     }
 
     @Test
     @DisplayName("удаляет книгу")
     void shouldDeleteBook() {
-        service.deleteBook(1);
+        service.deleteBook("qwe");
 
-        verify(bRepo, times(1)).deleteById(anyLong());
+        verify(bRepo, times(1)).deleteBookByName(anyString());
     }
 }

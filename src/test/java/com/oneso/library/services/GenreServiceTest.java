@@ -50,15 +50,6 @@ class GenreServiceTest {
     }
 
     @Test
-    @DisplayName("возвращает жанр по id")
-    void shouldReturnGenreById() {
-        when(gRepo.findById(anyLong())).thenReturn(Optional.of(genreTest));
-
-        assertNotNull(service.getGenre(1));
-        verify(gRepo, times(1)).findById(anyLong());
-    }
-
-    @Test
     @DisplayName("возвращает жанр по имени")
     void shouldReturnGenreByName() {
         when(gRepo.findGenreByName(anyString())).thenReturn(Optional.of(genreTest));
@@ -70,8 +61,8 @@ class GenreServiceTest {
     @Test
     @DisplayName("удаляет жанр")
     void shouldDeleteGenre() {
-        service.deleteGenre(1);
+        service.deleteGenre("qwe");
 
-        verify(gRepo, times(1)).deleteById(anyLong());
+        verify(gRepo, times(1)).deleteById(anyString());
     }
 }

@@ -46,28 +46,28 @@ public class ApplicationControl {
     }
 
     @ShellMethod(value = "Show all comments for book", key = "show-all-comments")
-    public String showAllComments(@ShellOption long book_id) {
-        return entityPrinterService.preparePrintComments(commentService.getAllCommentsByBookId(book_id));
+    public String showAllComments(@ShellOption String name) {
+        return entityPrinterService.preparePrintComments(commentService.getAllCommentsByBookName(name));
     }
 
     @ShellMethod(value = "Show all info for book", key = "show-book")
-    public String showBook(@ShellOption long book_id) {
-        return entityPrinterService.preparePrintBook(bookService.getBook(book_id));
+    public String showBook(@ShellOption String name) {
+        return entityPrinterService.preparePrintBook(bookService.getBook(name));
     }
 
     @ShellMethod(value = "Show all info for author", key = "show-author")
-    public String showAuthor(@ShellOption long author_id) {
-        return entityPrinterService.preparePrintAuthorWithBook(bookService.getAllBookByAuthorId(author_id));
+    public String showAuthor(@ShellOption String name) {
+        return entityPrinterService.preparePrintAuthorWithBook(bookService.getAllBookByAuthorName(name));
     }
 
     @ShellMethod(value = "Show all info for genre", key = "show-genre")
-    public String showGenre(@ShellOption long genre_id) {
-        return entityPrinterService.preparePrintGenreWithBook(bookService.getAllBookByGenreId(genre_id));
+    public String showGenre(@ShellOption String name) {
+        return entityPrinterService.preparePrintGenreWithBook(bookService.getAllBookByGenreName(name));
     }
 
     @ShellMethod(value = "Add new book in library", key = "add-book")
-    public void addBook(@ShellOption String book, @ShellOption long author_id, @ShellOption long genre_id) {
-        bookService.addBook(book, author_id, genre_id);
+    public void addBook(@ShellOption String book, @ShellOption String author_id, @ShellOption String name) {
+        bookService.addBook(book, author_id, name);
     }
 
     @ShellMethod(value = "Add new author in library", key = "add-author")
@@ -81,27 +81,27 @@ public class ApplicationControl {
     }
 
     @ShellMethod(value = "Add new comment for book", key = "add-comment")
-    public void addComment(@ShellOption String comment, long book_id) {
-        commentService.addComment(comment, book_id);
+    public void addComment(@ShellOption String comment, String book_name) {
+        commentService.addComment(comment, book_name);
     }
 
     @ShellMethod(value = "Delete book in library", key = "delete-book")
-    public void deleteBook(@ShellOption long book_id) {
-        bookService.deleteBook(book_id);
+    public void deleteBook(@ShellOption String name) {
+        bookService.deleteBook(name);
     }
 
     @ShellMethod(value = "Delete author in library", key = "delete-author")
-    public void deleteAuthor(@ShellOption long author_id) {
-        authorService.deleteAuthor(author_id);
+    public void deleteAuthor(@ShellOption String name) {
+        authorService.deleteAuthor(name);
     }
 
     @ShellMethod(value = "Delete genre in library", key = "delete-genre")
-    public void deleteGenre(@ShellOption long genre_id) {
-        genreService.deleteGenre(genre_id);
+    public void deleteGenre(@ShellOption String name) {
+        genreService.deleteGenre(name);
     }
 
     @ShellMethod(value = "Delete comment in book", key = "delete-comment")
-    public void deleteComment(@ShellOption long comment_id) {
-        commentService.deleteById(comment_id);
+    public void deleteComment(@ShellOption String name) {
+        commentService.deleteById(name);
     }
 }

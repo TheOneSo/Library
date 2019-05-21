@@ -2,7 +2,6 @@ package com.oneso.library.services;
 
 import com.oneso.library.domain.Author;
 import com.oneso.library.repository.AuthorRepository;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,13 +23,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getAuthor(long id) {
-        Optional<Author> author = authorRepository.findById(id);
-
-        return author.orElseGet(Author::new);
-    }
-
-    @Override
     public Author getAuthor(String name) {
         Optional<Author> author = authorRepository.findAuthorByName(name);
 
@@ -39,11 +31,11 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> getAllAuthors() {
-        return authorRepository.findAll(Sort.by(Sort.Order.asc("name")));
+        return authorRepository.findAll();
     }
 
     @Override
-    public void deleteAuthor(long id) {
-        authorRepository.deleteById(id);
+    public void deleteAuthor(String name) {
+        authorRepository.deleteAuthorByName(name);
     }
 }
