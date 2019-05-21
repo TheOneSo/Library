@@ -1,15 +1,11 @@
 package com.oneso.library.events;
 
-import com.oneso.library.domain.Author;
 import com.oneso.library.domain.Book;
-import com.oneso.library.domain.Genre;
 import com.oneso.library.repository.AuthorRepository;
 import com.oneso.library.repository.GenreRepository;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class MongoBookCascadeSaveEventsListener extends AbstractMongoEventListener<Book> {
@@ -28,22 +24,18 @@ public class MongoBookCascadeSaveEventsListener extends AbstractMongoEventListen
 
         Book book = event.getSource();
 
-        if(book.getAuthor() != null) {
-            if(!authorRepository.findAuthorByName(book.getAuthor().getName()).isPresent()) {
-                authorRepository.save(book.getAuthor());
-            } else {
-                Optional<Author> author = authorRepository.findAuthorByName(book.getAuthor().getName());
-                book.setAuthor(author.get());
-            }
+        if(book.getAuthor().getId() != null) {
+            book.setAuthor(authorRepository.findById(book.getAuthor().getId()).orElseGet(
+                    () -> authorRepository.save(book.getAuthor())));
+        } else {
+            authorRepository.save(book.getAuthor());
         }
 
-        if(book.getGenre() != null) {
-            if(!genreRepository.findGenreByName(book.getGenre().getName()).isPresent()) {
-                genreRepository.save(book.getGenre());
-            } else {
-                Optional<Genre> genre = genreRepository.findGenreByName(book.getGenre().getName());
-                book.setGenre(genre.get());
-            }
+        if(book.getGenre().getId() != null) {
+            book.setGenre(genreRepository.findById(book.getGenre().getId()).orElseGet(
+                    () -> genreRepository.save(book.getGenre())));
+        } else {
+            genreRepository.save(book.getGenre());
         }
     }
 }

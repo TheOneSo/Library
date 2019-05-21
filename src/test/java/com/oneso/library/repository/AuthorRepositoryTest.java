@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
@@ -14,7 +15,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 @DataMongoTest
-@ComponentScan({"com.oneso.library.repository", "com.oneso.library.events"})
+@ComponentScan({"com.oneso.library.repository", "com.oneso.library.events", "com.oneso.library.mongoConfig"})
 @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @DisplayName("Репозиторий по работе с авторами")
@@ -23,13 +24,16 @@ class AuthorRepositoryTest {
     @Autowired
     private AuthorRepository repository;
 
+    @Autowired
+    private MongoTemplate template;
+
     @Test
     @DisplayName("добавляет нового автора")
     void shouldAddNewAuthor() {
-        Author author = new Author("test");
+        Author author = new Author("test", "1");
         repository.save(author);
 
-        assertThat(repository.findAuthorByName("test").get().getName())
+        assertThat(repository.findById("1").get().getName())
                 .isEqualTo(author.getName());
     }
 
@@ -37,9 +41,6 @@ class AuthorRepositoryTest {
     @Test
     @DisplayName("находит всех авторов")
     void shouldFindAllAuthorsById() {
-        Author author = new Author("qwe");
-        repository.save(author);
-
         List<Author> authors = repository.findAll();
 
         assertThat(authors.get(0))
@@ -49,13 +50,13 @@ class AuthorRepositoryTest {
     @Test
     @DisplayName("удаляет автора")
     void shouldDeleteAuthor() {
-        Author author = new Author("delA");
+        Author author = new Author("delA", "2");
         long expected = repository.count();
-        repository.save(author);
+        template.save(author);
 
-        Author actual = repository.findAuthorByName("delA").get();
+        Author actual = repository.findById("2").get();
 
-        repository.deleteAuthorByName(actual.getName());
+        repository.deleteById(actual.getId());
 
         assertThat(repository.count())
                 .isEqualTo(expected);

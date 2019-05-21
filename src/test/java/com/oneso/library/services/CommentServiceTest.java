@@ -33,9 +33,9 @@ class CommentServiceTest {
     @Test
     @DisplayName("возвращает список комментариев к книге")
     void shouldReturnListCommentForBook() {
-        service.getAllCommentsByBookName("qwe");
+        service.getAllCommentsByBookId("qwe");
 
-        verify(cRepo, times(1)).findCommentByBookName(anyString());
+        verify(cRepo, times(1)).findCommentByBookId(anyString());
     }
 
     @Test

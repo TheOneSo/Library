@@ -18,8 +18,14 @@ public class Comment {
     @Field("book")
     private Book book;
 
-    public Comment(String name, Book book) {
-        this.text = name;
+    public Comment(String text, Book book) {
+        this.text = text;
+        this.book = book;
+    }
+
+    public Comment(String text, String id, Book book) {
+        this.text = text;
+        this.id = id;
         this.book = book;
     }
 

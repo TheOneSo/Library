@@ -8,7 +8,7 @@ public interface AuthorService {
 
     void addAuthor(String name);
 
-    Author getAuthor(String name);
+    Author getAuthor(String id);
 
     List<Author> getAllAuthors();
 

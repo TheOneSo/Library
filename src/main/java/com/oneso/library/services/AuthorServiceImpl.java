@@ -23,8 +23,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getAuthor(String name) {
-        Optional<Author> author = authorRepository.findAuthorByName(name);
+    public Author getAuthor(String id) {
+        Optional<Author> author = authorRepository.findById(id);
 
         return author.orElseGet(Author::new);
     }
@@ -35,7 +35,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void deleteAuthor(String name) {
-        authorRepository.deleteAuthorByName(name);
+    public void deleteAuthor(String id) {
+        authorRepository.deleteById(id);
     }
 }

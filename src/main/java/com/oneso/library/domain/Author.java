@@ -18,6 +18,11 @@ public class Author {
         this.name = name;
     }
 
+    public Author(String name, String id) {
+        this.name = name;
+        this.id = id;
+    }
+
     public Author() {}
 
     public String getName() {

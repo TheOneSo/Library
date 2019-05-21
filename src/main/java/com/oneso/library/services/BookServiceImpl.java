@@ -18,8 +18,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void addBook(String bookName, String author_name, String genre_name) {
-        Book book = new Book(bookName, new Author(author_name), new Genre(genre_name));
+    public void addBook(String bookName, String authorName, String genreName) {
+        Book book = new Book(bookName, new Author(authorName), new Genre(genreName));
         bookRepository.save(book);
     }
 
@@ -29,8 +29,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book getBook(String name) {
-        return bookRepository.findBookByName(name).orElseGet(Book::new);
+    public Book getBook(String id) {
+        return bookRepository.findById(id).orElseGet(Book::new);
     }
 
     @Override
@@ -39,12 +39,27 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> getAllBookByAuthorId(String id) {
+        return bookRepository.findBookByAuthorId(id);
+    }
+
+    @Override
     public List<Book> getAllBookByGenreName(String name) {
         return bookRepository.findBookByGenreName(name);
     }
 
     @Override
-    public void deleteBook(String name) {
-        bookRepository.deleteBookByName(name);
+    public List<Book> getAllBookByGenreId(String id) {
+        return bookRepository.findBookByGenreId(id);
+    }
+
+    @Override
+    public void deleteBook(String id) {
+        bookRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteBookByAuthor(String id) {
+        bookRepository.deleteBookByAuthorId(id);
     }
 }

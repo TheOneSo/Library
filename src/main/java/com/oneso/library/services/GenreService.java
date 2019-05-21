@@ -10,7 +10,7 @@ public interface GenreService {
 
     List<Genre> getAllGenres();
 
-    Genre getGenre(String name);
+    Genre getGenre(String id);
 
-    void deleteGenre(String name);
+    void deleteGenre(String id);
 }

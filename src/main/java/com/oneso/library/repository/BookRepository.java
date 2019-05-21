@@ -13,14 +13,16 @@ public interface BookRepository extends MongoRepository<Book, String> {
     Optional<Book> findBookByName(String name);
 
     @Query("{ 'author.name': :#{#name} }")
-    List<Book>  findBookByAuthorName(@Param("name") String name);
+    List<Book> findBookByAuthorName(@Param("name") String name);
+
+    @Query("{ 'author.id': :#{#id} }")
+    List<Book> findBookByAuthorId(@Param("id") String id);
+
+    @Query("{ 'genre.id': :#{#id} }")
+    List<Book> findBookByGenreId(@Param("id") String id);
 
     @Query("{ 'genre.name': :#{#name} }")
     List<Book> findBookByGenreName(@Param("name") String name);
 
-    void deleteBookByName(String name);
-
     void deleteBookByAuthorId(String id);
-
-    void deleteBookByAuthorName(String name);
 }

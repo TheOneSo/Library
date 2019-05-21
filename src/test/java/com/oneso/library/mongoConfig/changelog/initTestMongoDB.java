@@ -25,21 +25,21 @@ public class initTestMongoDB {
 
     @ChangeSet(order = "002", author = "sergey", id = "initGenre", runAlways = true)
     public void initGenre(MongoTemplate template) {
-        testG = template.save(new Genre("testG"));
+        testG = template.save(new Genre("testG", "1"));
     }
 
     @ChangeSet(order = "003", author = "sergey", id = "initAuthor", runAlways = true)
     public void initAuthor(MongoTemplate template) {
-        testA = template.save(new Author("testA"));
+        testA = template.save(new Author("testA", "1"));
     }
 
     @ChangeSet(order = "004", author = "sergey", id = "initBook", runAlways = true)
     public void initBook(MongoTemplate template) {
-        testB = template.save(new Book("testB", testA, testG));
+        testB = template.save(new Book("testB", "1", testA, testG));
     }
 
     @ChangeSet(order = "004", author = "sergey", id = "initComment", runAlways = true)
     public void initComment(MongoTemplate template) {
-        template.save(new Comment("testC", testB));
+        template.save(new Comment("testC", "1", testB));
     }
 }
