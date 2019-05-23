@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.data.domain.Sort;
 
 import java.util.Optional;
 
@@ -38,10 +37,10 @@ class AuthorServiceTest {
     @Test
     @DisplayName("возвращает автора по имени")
     void shouldReturnAuthorByName() {
-        when(aRepo.findAuthorByName(anyString())).thenReturn(Optional.of(new Author()));
+        when(aRepo.findById(anyString())).thenReturn(Optional.of(new Author()));
 
         assertNotNull(service.getAuthor("test"));
-        verify(aRepo, times(1)).findAuthorByName(anyString());
+        verify(aRepo, times(1)).findById(anyString());
     }
 
     @Test
@@ -57,6 +56,6 @@ class AuthorServiceTest {
     void shouldDeleteAuthor() {
         service.deleteAuthor("qwe");
 
-        verify(aRepo, times(1)).deleteAuthorByName(anyString());
+        verify(aRepo, times(1)).deleteById(anyString());
     }
 }

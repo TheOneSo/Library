@@ -16,18 +16,19 @@ public class CommentServiceImpl implements CommentService {
         this.commentRepository = commentRepository;
     }
 
+    // TODO: 2019-04-23 тут
     @Override
-    public void addComment(String text, String book_id) {
+    public void addComment(String text, String bookId) {
         Book book = new Book();
-        book.setId(book_id);
+        book.setId(bookId);
 
         Comment comment = new Comment(text, book);
         commentRepository.save(comment);
     }
 
     @Override
-    public List<Comment> getAllCommentsByBookName(String name) {
-        return commentRepository.findCommentByBookName(name);
+    public List<Comment> getAllCommentsByBookId(String id) {
+        return commentRepository.findCommentByBookId(id);
     }
 
     @Override

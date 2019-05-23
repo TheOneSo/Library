@@ -52,10 +52,10 @@ class GenreServiceTest {
     @Test
     @DisplayName("возвращает жанр по имени")
     void shouldReturnGenreByName() {
-        when(gRepo.findGenreByName(anyString())).thenReturn(Optional.of(genreTest));
+        when(gRepo.findById(anyString())).thenReturn(Optional.of(genreTest));
 
         assertNotNull(service.getGenre("test"));
-        verify(gRepo, times(1)).findGenreByName(anyString());
+        verify(gRepo, times(1)).findById(anyString());
     }
 
     @Test

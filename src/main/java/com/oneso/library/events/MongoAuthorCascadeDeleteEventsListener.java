@@ -21,7 +21,7 @@ public class MongoAuthorCascadeDeleteEventsListener extends AbstractMongoEventLi
         super.onAfterDelete(event);
 
         Document source = event.getSource();
-        String name = source.get("name").toString();
-        bookRepository.deleteBookByAuthorName(name);
+        String id = source.get("_id").toString();
+        bookRepository.deleteBookByAuthorId(id);
     }
 }

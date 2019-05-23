@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface CommentService {
 
-    void addComment(String text, String book_id);
+    void addComment(String text, String bookId);
 
-    List<Comment> getAllCommentsByBookName(String name);
+    List<Comment> getAllCommentsByBookId(String id);
 
     void deleteById(String id);
 }

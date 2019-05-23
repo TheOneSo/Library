@@ -15,7 +15,7 @@ public class Book {
     @Field("name")
     private String name;
 
-    //@DBRef
+    @DBRef
     @Field("author")
     private Author author;
 
@@ -25,6 +25,13 @@ public class Book {
 
     public Book(String name, Author author, Genre genre) {
         this.name = name;
+        this.author = author;
+        this.genre = genre;
+    }
+
+    public Book(String name, String id, Author author, Genre genre) {
+        this.name = name;
+        this.id = id;
         this.author = author;
         this.genre = genre;
     }

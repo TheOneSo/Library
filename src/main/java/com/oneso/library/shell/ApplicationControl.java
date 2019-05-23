@@ -46,62 +46,62 @@ public class ApplicationControl {
     }
 
     @ShellMethod(value = "Show all comments for book", key = "show-all-comments")
-    public String showAllComments(@ShellOption String name) {
-        return entityPrinterService.preparePrintComments(commentService.getAllCommentsByBookName(name));
+    public String showAllComments(@ShellOption String id) {
+        return entityPrinterService.preparePrintComments(commentService.getAllCommentsByBookId(id));
     }
 
     @ShellMethod(value = "Show all info for book", key = "show-book")
-    public String showBook(@ShellOption String name) {
-        return entityPrinterService.preparePrintBook(bookService.getBook(name));
+    public String showBook(@ShellOption String id) {
+        return entityPrinterService.preparePrintBook(bookService.getBook(id));
     }
 
     @ShellMethod(value = "Show all info for author", key = "show-author")
-    public String showAuthor(@ShellOption String name) {
-        return entityPrinterService.preparePrintAuthorWithBook(bookService.getAllBookByAuthorName(name));
+    public String showAuthor(@ShellOption String id) {
+        return entityPrinterService.preparePrintAuthorWithBook(bookService.getAllBookByAuthorId(id));
     }
 
     @ShellMethod(value = "Show all info for genre", key = "show-genre")
-    public String showGenre(@ShellOption String name) {
-        return entityPrinterService.preparePrintGenreWithBook(bookService.getAllBookByGenreName(name));
+    public String showGenre(@ShellOption String id) {
+        return entityPrinterService.preparePrintGenreWithBook(bookService.getAllBookByGenreId(id));
     }
 
     @ShellMethod(value = "Add new book in library", key = "add-book")
-    public void addBook(@ShellOption String book, @ShellOption String author_id, @ShellOption String name) {
-        bookService.addBook(book, author_id, name);
+    public void addBook(@ShellOption String bookName, @ShellOption String authorName, @ShellOption String genreName) {
+        bookService.addBook(bookName, authorName, genreName);
     }
 
     @ShellMethod(value = "Add new author in library", key = "add-author")
-    public void addAuthor(@ShellOption String author) {
-        authorService.addAuthor(author);
+    public void addAuthor(@ShellOption String authorName) {
+        authorService.addAuthor(authorName);
     }
 
     @ShellMethod(value = "Add new genre in library", key = "add-genre")
-    public void addGenre(@ShellOption String genre) {
-        genreService.addGenre(genre);
+    public void addGenre(@ShellOption String genreName) {
+        genreService.addGenre(genreName);
     }
 
     @ShellMethod(value = "Add new comment for book", key = "add-comment")
-    public void addComment(@ShellOption String comment, String book_name) {
-        commentService.addComment(comment, book_name);
+    public void addComment(@ShellOption String comment, String bookId) {
+        commentService.addComment(comment, bookId);
     }
 
     @ShellMethod(value = "Delete book in library", key = "delete-book")
-    public void deleteBook(@ShellOption String name) {
-        bookService.deleteBook(name);
+    public void deleteBook(@ShellOption String id) {
+        bookService.deleteBook(id);
     }
 
     @ShellMethod(value = "Delete author in library", key = "delete-author")
-    public void deleteAuthor(@ShellOption String name) {
-        authorService.deleteAuthor(name);
+    public void deleteAuthor(@ShellOption String id) {
+        authorService.deleteAuthor(id);
     }
 
     @ShellMethod(value = "Delete genre in library", key = "delete-genre")
-    public void deleteGenre(@ShellOption String name) {
-        genreService.deleteGenre(name);
+    public void deleteGenre(@ShellOption String id) {
+        genreService.deleteGenre(id);
     }
 
     @ShellMethod(value = "Delete comment in book", key = "delete-comment")
-    public void deleteComment(@ShellOption String name) {
-        commentService.deleteById(name);
+    public void deleteComment(@ShellOption String id) {
+        commentService.deleteById(id);
     }
 }
