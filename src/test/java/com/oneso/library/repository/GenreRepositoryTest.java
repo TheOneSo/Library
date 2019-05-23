@@ -34,8 +34,8 @@ class GenreRepositoryTest {
         Genre genre = new Genre("genre", "123");
         repository.save(genre);
 
-        assertThat(repository.findById(genre.getId()).get().getName())
-                .isEqualTo(genre.getName());
+        assertThat(template.findById("123", Genre.class)).isNotNull()
+                .isEqualToComparingOnlyGivenFields(genre, "name");
     }
 
     @Test
@@ -52,8 +52,7 @@ class GenreRepositoryTest {
     void shouldFindAllGenres() {
         List<Genre> genres = repository.findAll();
 
-        assertThat(genres.get(0).getName())
-                .isNotNull();
+        assertThat(genres).hasSize(1).allSatisfy(genre -> assertThat(genre).isNotNull());
     }
 
     @Test

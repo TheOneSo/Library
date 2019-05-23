@@ -33,18 +33,16 @@ class AuthorRepositoryTest {
         Author author = new Author("test", "1");
         repository.save(author);
 
-        assertThat(repository.findById("1").get().getName())
-                .isEqualTo(author.getName());
+        assertThat(template.findById("1", Author.class))
+                .isNotNull().isEqualToComparingOnlyGivenFields(author, "name");
     }
-
 
     @Test
     @DisplayName("находит всех авторов")
     void shouldFindAllAuthorsById() {
         List<Author> authors = repository.findAll();
 
-        assertThat(authors.get(0))
-                .isNotNull();
+        assertThat(authors).hasSize(1).allSatisfy(author -> assertThat(author).isNotNull());
     }
 
     @Test
@@ -54,7 +52,7 @@ class AuthorRepositoryTest {
         long expected = repository.count();
         template.save(author);
 
-        Author actual = repository.findById("2").get();
+        Author actual = template.findById("2", Author.class);
 
         repository.deleteById(actual.getId());
 

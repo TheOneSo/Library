@@ -37,8 +37,9 @@ class BookRepositoryTest {
                 new Author("test", "111"), new Genre("test", "111"));
         repository.save(book);
 
-        assertThat(repository.findById("111").get().getId())
-                .isEqualTo(book.getId());
+        assertThat(template.findById("111", Book.class))
+                .isNotNull().isEqualToComparingOnlyGivenFields(book,
+                "name", "genre.name", "author.name");
     }
 
     @Test
@@ -61,8 +62,7 @@ class BookRepositoryTest {
     void shouldFindAllBooks() {
         List<Book> books = repository.findAll();
 
-        assertThat(books.get(0))
-                .isNotNull();
+        assertThat(books).allSatisfy(book -> assertThat(book).isNotNull());
     }
 
     @Test
@@ -70,8 +70,7 @@ class BookRepositoryTest {
     void shouldFindAllBookByAuthor() {
         List<Book> actuals = repository.findBookByAuthorId("1");
 
-        assertThat(actuals.get(0).getName())
-                .isEqualTo("testB");
+        assertThat(actuals).allSatisfy(book -> assertThat(book.getName()).isEqualTo("testB"));
     }
 
     @Test
@@ -79,8 +78,7 @@ class BookRepositoryTest {
     void shouldFindAllBookByGenre() {
         List<Book> actuals = repository.findBookByGenreId("1");
 
-        assertThat(actuals.get(0).getName())
-                .isEqualTo("testB");
+        assertThat(actuals).allSatisfy(book -> assertThat(book.getName()).isEqualTo("testB"));
     }
 
     @Test

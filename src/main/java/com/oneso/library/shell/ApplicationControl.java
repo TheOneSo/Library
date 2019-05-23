@@ -66,18 +66,18 @@ public class ApplicationControl {
     }
 
     @ShellMethod(value = "Add new book in library", key = "add-book")
-    public void addBook(@ShellOption String book, @ShellOption String author, @ShellOption String genre) {
-        bookService.addBook(book, author, genre);
+    public void addBook(@ShellOption String bookName, @ShellOption String authorName, @ShellOption String genreName) {
+        bookService.addBook(bookName, authorName, genreName);
     }
 
     @ShellMethod(value = "Add new author in library", key = "add-author")
-    public void addAuthor(@ShellOption String author) {
-        authorService.addAuthor(author);
+    public void addAuthor(@ShellOption String authorName) {
+        authorService.addAuthor(authorName);
     }
 
     @ShellMethod(value = "Add new genre in library", key = "add-genre")
-    public void addGenre(@ShellOption String genre) {
-        genreService.addGenre(genre);
+    public void addGenre(@ShellOption String genreName) {
+        genreService.addGenre(genreName);
     }
 
     @ShellMethod(value = "Add new comment for book", key = "add-comment")

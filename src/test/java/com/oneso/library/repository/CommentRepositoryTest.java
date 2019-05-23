@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
@@ -24,6 +25,9 @@ class CommentRepositoryTest {
     @Autowired
     private CommentRepository repository;
 
+    @Autowired
+    private MongoTemplate template;
+
     @Test
     @DisplayName("добавляет новый комментарий")
     void shouldAddNewComment() {
@@ -31,8 +35,8 @@ class CommentRepositoryTest {
                 new Book("test", "123", new Author("test", "1"), new Genre("test", "1")));
         repository.save(comment);
 
-        assertThat(repository.findCommentByBookId("123").get(0).getText())
-                .isEqualTo(comment.getText());
+        assertThat(template.findById("123", Comment.class))
+                .isNotNull().isEqualToComparingOnlyGivenFields(comment, "text", "book.name");
     }
 
     @Test
